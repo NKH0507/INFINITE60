@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         vfx = GetComponent<VisualEffects>();
-    }
+    }//wewew
 
     private void Update()
     {
