@@ -14,8 +14,6 @@ public class Brick : MonoBehaviour
     {
         
     }
-<<<<<<< Updated upstream
-=======
 
     //�������� �Ծ��� ��
     private void OnHit(int dmg)
@@ -40,6 +38,4 @@ public class Brick : MonoBehaviour
             OnHit(Ball.power); //OnHit�� �������� �־� ������ ��ŭ ü���� ���̰� ��
         }
     }
-
->>>>>>> Stashed changes
 }
