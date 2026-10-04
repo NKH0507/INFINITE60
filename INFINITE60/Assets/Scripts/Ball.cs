@@ -20,11 +20,14 @@ public class ball : MonoBehaviour
     public Transform panel;
     public float offsetY = 0.5f;
 
+    GameManager gameManager;
+
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
         rigid.simulated = false; // 발사 전에는 물리 영향을 받지 않게 함
         startBallPos = transform.position; // 현재 공의 위치를 저장
+        gameManager = FindFirstObjectByType<GameManager>(); //GameManager 찾기
     }
 
     void Update()
@@ -94,6 +97,7 @@ public class ball : MonoBehaviour
         rigid.simulated = true; //물리 기능 활성화
         rigid.linearVelocity = direction * strong; // 계산된 방향과 힘으로 발사
         isLaunched = true;
+        gameManager.timeManager.StartTimer(); //시간 시작
     }
 
     void ballmove()
@@ -127,6 +131,10 @@ public class ball : MonoBehaviour
                     isTouchUp = true;
                     // Y 방향 반전
                     rigid.linearVelocity = new Vector2(rigid.linearVelocity.x, -rigid.linearVelocity.y);
+                    break;
+                case "downwall":
+                    isTouchDown = true;
+                    gameManager.BallFell(); // 공이 떨어졌다고 GameManager에 알림
                     break;
             }
 
@@ -197,6 +205,9 @@ public class ball : MonoBehaviour
         // 발사 전 상태로 변경
         isLaunched = false;
 
+        // 시간 정지
+        gameManager.timeManager.StopTimer();
+
         // 물리 기능 끄기
         rigid.simulated = false;
 
@@ -210,12 +221,7 @@ public class ball : MonoBehaviour
         rigid.gravityScale = 1f;
 
         // 패널 가운데 위로 이동
-        transform.position = new Vector3(
-            panel.position.x,
-            panel.position.y + offsetY,
-            transform.position.z
-        );
-
+        transform.position = new Vector3(panel.position.x,panel.position.y + offsetY,transform.position.z);
     }
 
     // 플래그 지우기
@@ -235,6 +241,9 @@ public class ball : MonoBehaviour
 
                 case "upwall":
                     isTouchUp = false;
+                    break;
+                case "downwall":
+                    isTouchDown = false;
                     break;
             }
 
