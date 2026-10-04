@@ -14,4 +14,32 @@ public class Brick : MonoBehaviour
     {
         
     }
+<<<<<<< Updated upstream
+=======
+
+    //�������� �Ծ��� ��
+    private void OnHit(int dmg)
+    {
+        hp -= dmg;
+
+        //�� �� ��� �����
+        if (hp <= 0)
+        {
+            GameManager gamemanager = FindObjectOfType<GameManager>();
+            Destroy(gameObject);
+            gamemanager.BrickDestroyed();
+        }
+    }
+
+    // ������ ����
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "ball")
+        {
+            ball Ball = collision.gameObject.GetComponent<ball>(); //�浹�� ������Ʈ���� ball ��ũ��Ʈ ������
+            OnHit(Ball.power); //OnHit�� �������� �־� ������ ��ŭ ü���� ���̰� ��
+        }
+    }
+
+>>>>>>> Stashed changes
 }
