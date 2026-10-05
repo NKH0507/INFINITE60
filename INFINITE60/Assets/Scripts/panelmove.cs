@@ -7,6 +7,7 @@ public class panelmove : MonoBehaviour
     public bool isTouchLeft;
     public bool isTouchRight;
     Vector2 mouseStartPos;
+    public ball Ball;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,6 +22,12 @@ public class panelmove : MonoBehaviour
     }
     void Move()
     {
+        // 공이 발사되지 않았으면 패널 이동 금지
+        if (!Ball.isLaunched)
+        {
+            return;
+        }
+
         float h = 0;
 
         if (Mouse.current.leftButton.isPressed)

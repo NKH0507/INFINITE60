@@ -3,6 +3,7 @@ using UnityEngine;
 public class Brick : MonoBehaviour
 {
     public int hp = 3;
+    public bool isObstacle = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -25,12 +26,17 @@ public class Brick : MonoBehaviour
         {
             GameManager gamemanager = FindObjectOfType<GameManager>();
             Destroy(gameObject);
-            gamemanager.BrickDestroyed();
+
+            if(!isObstacle)
+            {
+                gamemanager.BrickDestroyed();
+            }
+
         }
     }
 
     // 데미지 측정
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "ball")
         {

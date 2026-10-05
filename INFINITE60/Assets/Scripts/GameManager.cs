@@ -97,61 +97,23 @@ public class GameManager : MonoBehaviour
         StartCoroutine(ChangeStage());
     }
 
-
     IEnumerator ChangeStage()
     {
-        isChangingStage = true;
-
-        //시간 정지
-        timeManager.StopTimer();
-
-        // 공과 패널 숨기기
-        ball.SetActive(false);
-        panel.SetActive(false);
-
-        // 카메라 줌아웃
-        float targetSize = 20f;
-
-        while (mainCamera.orthographicSize < targetSize)
-        {
-            // 카메라 크기를 점점 크게 만듦
-            mainCamera.orthographicSize += Time.deltaTime * 5f;
-
-            yield return null;
-        }
-
-        // 잠깐 기다림
-        yield return new WaitForSeconds(0.5f);
-
-        // 현재 스테이지 삭제
-        stageManager.ClearStage();
-
-        // 다음 스테이지 번호
-        currentStage++;
+        isChangingStage = true; // 스테이지 전환 중이라는 것을 표시
+        currentStage++; // 다음 스테이지 번호로 변경
 
         // 다음 스테이지가 존재하는지 확인
         if (currentStage <= stages.Length)
         {
-            // 다음 스테이지 생성
-            stageManager.CreateStage(stages[currentStage - 1]);
-            // 다음 스테이지의 벽돌 개수 저장
-            startBrickCount = stageManager.GetBrickCount();
-            // 제한시간 초기화
-            timeManager.ResetTime();
+            yield return StartCoroutine(stageManager.StageTransition(stages[currentStage - 1],ChangeStageFinished)); // StageManager에게 스테이지 전환을 맡긴다.
         }
+    }
 
-        // 카메라 원래 크기로 복구
-        mainCamera.orthographicSize = startCameraSize;
-
-        // 공과 패널 다시 등장
-        panel.SetActive(true);
-        ball.SetActive(true);
-
-        // 공 초기화
-        ResetBall();
-
-        // 화면 전환 완료
-        isChangingStage = false;
+    // 스테이지 전환이 끝난 후 실행되는 함수
+    void ChangeStageFinished()
+    {
+        startBrickCount = stageManager.GetBrickCount(); // 새로 생성된 스테이지의 전체 벽돌 개수를 저장한다.
+        isChangingStage = false; // 스테이지 전환이 끝났다고 표시
     }
 
     // 공 초기 상태로 되돌림
