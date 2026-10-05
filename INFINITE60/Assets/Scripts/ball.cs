@@ -5,64 +5,81 @@ using UnityEngine.InputSystem;
 
 public class ball : MonoBehaviour
 {
-    public bool isTouchLeft;
-    public bool isTouchRight;
-    public bool isTouchUp;
     public bool isTouchDown;
 
     public int power;
 
-    bool isLaunched = false;
+    public bool isLaunched = false;
     Vector2 startMousePos;
     Vector3 startBallPos;
+
+    public bool isTransitioning = false;
 
     Rigidbody2D rigid;
     public Transform panel;
     public float offsetY = 0.5f;
 
+    //ÀüÈ¯ »óÅÂ ÀúÀå º¯¼ö
+    Vector3 savedPosition;
+    Vector2 savedVelocity;
+    float savedSpeed;
+    bool savedIsLaunched;
+
     GameManager gameManager;
+
+    // ¹ß»ç ¹æÇâ Ç¥½Ã¿ë LineRenderer
+    public LineRenderer aimLine;
+
+    // °øÀÇ °íÁ¤ ¹ß»ç ¼Óµµ
+    public float launchSpeed = 10f;
+    float currentSpeed;
 
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
-        rigid.simulated = false; // ë°œì‚¬ ì „ì—ëŠ” ë¬¼ë¦¬ ì˜í–¥ì„ ë°›ì§€ ì•Šê²Œ í•¨
-        startBallPos = transform.position; // í˜„ì¬ ê³µì˜ ìœ„ì¹˜ë¥¼ ì €ì¥
-        gameManager = FindFirstObjectByType<GameManager>(); //GameManager ì°¾ê¸°
+        rigid.simulated = false; // ¹ß»ç Àü¿¡´Â ¹°¸® ¿µÇâÀ» ¹ŞÁö ¾Ê°Ô ÇÔ
+        startBallPos = transform.position; // ÇöÀç °øÀÇ À§Ä¡¸¦ ÀúÀå
+        gameManager = FindFirstObjectByType<GameManager>(); //GameManager Ã£±â
+        aimLine.enabled = false; // Ã³À½¿¡´Â ¹æÇâ Ç¥½Ã ²ô±â
+        currentSpeed = launchSpeed;
     }
 
     void Update()
     {
-        //ë°œì‚¬ì „
+        // ½ºÅ×ÀÌÁö ÀüÈ¯ Áß¿¡´Â
+        // °ø À§Ä¡¸¦ ÆĞ³Î À§Ä¡·Î °­Á¦·Î ÀÌµ¿½ÃÅ°Áö ¾Ê´Â´Ù.
+        if (isTransitioning)
+        {
+            return;
+        }
+
+        // ¹ß»ç Àü
         if (!isLaunched)
         {
-            transform.position = new Vector3(panel.position.x, panel.position.y + offsetY, transform.position.z); //ê³µ ìœ„ì¹˜ ê³ ì •
+            transform.position = new Vector3(
+                panel.position.x,
+                panel.position.y + offsetY,
+                transform.position.z
+            );
 
-            //ì¢Œí´ë¦­ í•˜ëŠ” ìˆœê°„
+            // ÁÂÅ¬¸¯ ÇÏ´Â ¼ø°£
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
-                startMousePos = Mouse.current.position.ReadValue(); //í´ë¦­ìœ„ì¹˜ ì €ì¥
-                startBallPos = transform.position; //ê³µì˜ í˜„ì¬ ìœ„ì¹˜ ì €ì¥
-
+                startMousePos = Mouse.current.position.ReadValue();
+                startBallPos = transform.position;
+                aimLine.enabled = true;
             }
 
-            //ì¢Œí´ë¦­ í•˜ëŠ” ë™ì•ˆ
-            if(Mouse.current.leftButton.isPressed)
+            // ÁÂÅ¬¸¯ ÇÏ´Â µ¿¾È
+            if (Mouse.current.leftButton.isPressed)
             {
-                Vector2 mousePos = Mouse.current.position.ReadValue(); //í˜„ì¬ ë§ˆìš°ìŠ¤ ìœ„ì¹˜ ê°€ì ¸ì˜´
-                float mouseX = mousePos.x - startMousePos.x; //xë°©í–¥ ì´ë™ëŸ‰
-                float mouseY = startMousePos.y - mousePos.y; //yë°©í–¥ ì´ë™ëŸ‰
-                float moveX = mouseX * 0.01f; //ì¢Œìš°ë¡œ ì›€ì§ì¸ ì •ë„
-                float moveY = mouseY * 0.01f; //ì•„ë˜ë¡œ ë‹¹ê¸´ ì •ë„
-                //ì†ë„ ì œí•œ
-                moveX = Mathf.Clamp(moveX, -2f, 2f); 
-                moveY = Mathf.Clamp(moveY, 0f, 3f);
-
-                //transform.position = startBallPos + new Vector3(moveX, -moveY, 0); //ì²˜ìŒ ê³µì˜ ìœ„ì¹˜ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ë‹¹ê²¨ì§„ ìœ„ì¹˜ë¥¼ ê³„ì‚°
+                ShowAimDirection();
             }
 
-            //ë§ˆìš°ìŠ¤ ë—ì„ë•Œ
-            if(Mouse.current.leftButton.wasReleasedThisFrame)
+            // ¸¶¿ì½º ¶ÃÀ» ¶§
+            if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
+                aimLine.enabled = false;
                 Launch();
             }
         }
@@ -70,181 +87,178 @@ public class ball : MonoBehaviour
         {
             ballmove();
         }
+    }
 
+    void ShowAimDirection()
+    {
+        Vector2 mousePos = Mouse.current.position.ReadValue(); // ÇöÀç ¸¶¿ì½º À§Ä¡
+        // ¸¶¿ì½º¸¦ ¿òÁ÷ÀÎ °Å¸®
+        float mouseX = mousePos.x - startMousePos.x;
+        float mouseY = startMousePos.y - mousePos.y;
+
+        float directionX = mouseX * 0.01f; // ÁÂ¿ì ¹æÇâ
+        directionX = Mathf.Clamp(directionX, -1.8f, 1.8f); // ³Ê¹« ¸¹ÀÌ ²ªÀÌÁö ¾Êµµ·Ï Á¦ÇÑ
+        float directionY = 1f; // À§ÂÊ ¹æÇâ
+        Vector2 direction = new Vector2(directionX, directionY).normalized; // ¹ß»ç ¹æÇâ
+        aimLine.SetPosition(0, transform.position); // LineRenderer ½ÃÀÛÁ¡
+        float lineLength = 2.5f; // È­»ìÇ¥ ±æÀÌ
+        Vector3 endPosition = transform.position + (Vector3)(direction * lineLength); // LineRenderer ³¡Á¡
+        aimLine.SetPosition(1, endPosition); //¼± ±ß±â
     }
 
     void Launch()
     {
-        Vector2 mousePos = Mouse.current.position.ReadValue(); //ë§ˆìš°ìŠ¤ ìœ„ì¹˜
-        //ë§ˆìš°ìŠ¤ ì´ë™ê±°ë¦¬ ê³„ì‚°
+        Vector2 mousePos = Mouse.current.position.ReadValue();
+        // ¸¶¿ì½º¸¦ ´ç±ä ¹æÇâ °è»ê
         float mouseX = mousePos.x - startMousePos.x;
-        float mouseY = startMousePos.y - mousePos.y;
-        float directionX = mouseX * 0.01f; //ì¢Œìš° ë°©í–¥ ê³„ì‚°
-        directionX = Mathf.Clamp(directionX, -2f, 2f); //í¬ê²Œ êº¾ì´ì§€ ì•Šë„ë¡ ì œí•œ
-        float strong = mouseY * 0.05f; //í˜ ê³„ì‚°
-
-        //ìµœì†Œ ë°œì‚¬ í˜
-        if (strong < 2f)
-        { 
-            strong = 2f; 
-        }
-
-        //ë°œì‚¬ ë°©í–¥ ì •í•˜ê¸°
-        float directionY = 1f; 
-        Vector2 direction = new Vector2(directionX, directionY);
-        //ë°œì‚¬ê¸°ëŠ¥
-        direction = direction.normalized; //ë°©í–¥ í¬ê¸° 1ë¡œ
-        rigid.simulated = true; //ë¬¼ë¦¬ ê¸°ëŠ¥ í™œì„±í™”
-        rigid.linearVelocity = direction * strong; // ê³„ì‚°ëœ ë°©í–¥ê³¼ í˜ìœ¼ë¡œ ë°œì‚¬
-        isLaunched = true;
-        gameManager.timeManager.StartTimer(); //ì‹œê°„ ì‹œì‘
+        float directionX = mouseX * 0.01f; // ÁÂ¿ì ¹æÇâ
+        directionX = Mathf.Clamp(directionX, -2f, 2f); // ³Ê¹« ¸¹ÀÌ ²ªÀÌÁö ¾Êµµ·Ï Á¦ÇÑ
+        float directionY = 1f; // À§ÂÊ ¹æÇâ
+        Vector2 direction = new Vector2(directionX, directionY).normalized; // ¹ß»ç ¹æÇâ
+        rigid.simulated = true; // ¹°¸® ±â´É ÄÑ±â
+        rigid.linearVelocity = direction * currentSpeed;// ÇöÀç ¼Óµµ·Î °ø ¹ß»ç
+        isLaunched = true; // ¹ß»ç »óÅÂ
+        gameManager.timeManager.StartTimer(); // ½Ã°£ ½ÃÀÛ
     }
 
     void ballmove()
     {
-        Vector2 velocity = rigid.linearVelocity; // í˜„ì¬ ê³µ ì†ë„
+        Vector2 velocity = rigid.linearVelocity; // ÇöÀç °ø ¼Óµµ
         float h = velocity.x;
         float v = velocity.y;
     }
 
-    // ì¶©ëŒ í”Œë˜ê·¸ ìƒì„± + ê³µ íŠ•ê¸°ê¸°
+    // Ãæµ¹ ÇÃ·¡±× »ı¼º + °ø Æ¨±â±â
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "wall")
         {
-            switch (collision.gameObject.name)
+            if (collision.gameObject.name == "downwall")
             {
-                // ì™¼ìª½ ë²½ì— ë¶€ë”ªí˜
-                case "leftwall":
-                    isTouchLeft = true;
-                    // X ë°©í–¥ ë°˜ì „
-                    rigid.linearVelocity = new Vector2(-rigid.linearVelocity.x, rigid.linearVelocity.y);
-                    break;
-                // ì˜¤ë¥¸ìª½ ë²½ì— ë¶€ë”ªí˜
-                case "rightwall":
-                    isTouchRight = true;
-                    // X ë°©í–¥ ë°˜ì „
-                    rigid.linearVelocity = new Vector2(-rigid.linearVelocity.x, rigid.linearVelocity.y);
-                    break;
-                // ìœ„ìª½ ë²½ì— ë¶€ë”ªí˜
-                case "upwall":
-                    isTouchUp = true;
-                    // Y ë°©í–¥ ë°˜ì „
-                    rigid.linearVelocity = new Vector2(rigid.linearVelocity.x, -rigid.linearVelocity.y);
-                    break;
-                case "downwall":
-                    isTouchDown = true;
-                    gameManager.BallFell(); // ê³µì´ ë–¨ì–´ì¡Œë‹¤ê³  GameManagerì— ì•Œë¦¼
-                    break;
+                isTouchDown = true;
+                gameManager.BallFell(); // °øÀÌ ¶³¾îÁ³´Ù°í GameManager¿¡ ¾Ë¸²
             }
 
         }
         else if (collision.gameObject.tag == "panel")
         {
-            // íŒ¨ë„ì— ë§ìœ¼ë©´ ì¤‘ë ¥ì„ ì•½í•˜ê²Œ í•¨
-            rigid.gravityScale = 0.2f;
+            float speed = rigid.linearVelocity.magnitude; // ÇöÀç °øÀÇ ¼Óµµ
 
-            // íŒ¨ë„ì˜ ê°€ìš´ë° X ì¢Œí‘œ
+            // ÆĞ³ÎÀÇ °¡¿îµ¥ X ÁÂÇ¥
             float panelCenter = collision.transform.position.x;
 
-            // ê³µì´ íŒ¨ë„ ê°€ìš´ë°ì—ì„œ ì–¼ë§ˆë‚˜ ë–¨ì–´ì ¸ ë§ì•˜ëŠ”ì§€
+            // °øÀÌ ÆĞ³Î °¡¿îµ¥¿¡¼­ ¾ó¸¶³ª ¶³¾îÁ® ¸Â¾Ò´ÂÁö
             float hitPoint = transform.position.x - panelCenter;
 
-            // íŒ¨ë„ì˜ ì ˆë°˜ ë„ˆë¹„
+            // ÆĞ³ÎÀÇ Àı¹İ ³Êºñ
             float panelWidth = collision.bounds.size.x / 2;
 
-            // -1 ~ 1 ì‚¬ì´ì˜ ê°’ìœ¼ë¡œ ë³€í™˜
+            // -1 ~ 1 »çÀÌÀÇ °ªÀ¸·Î º¯È¯
             float h = hitPoint / panelWidth;
 
-            // í˜„ì¬ ê³µì˜ ì†ë ¥
-            float speed = rigid.linearVelocity.magnitude;
-
-            // ë°©í–¥ì„ ê²°ì •
-            float x = h; 
-            float y = 1f;
-
-            //ë°©í–¥ì€ ê·¸ëŒ€ë¡œ ìœ ì§€í•˜ë©´ì„œ í¬ê¸°ë§Œ 1ë¡œ
-            Vector2 direction = new Vector2(x, y).normalized;
-
-            // ê¸°ì¡´ ì†ë ¥ ìœ ì§€
-            rigid.linearVelocity = direction * speed;
-
-        }
-        else if (collision.gameObject.tag == "brick")
-        {
-            // ê³µì˜ í˜„ì¬ ìœ„ì¹˜
-            Vector2 ballPos = transform.position;
-            // ë²½ëŒì˜ ê°€ìš´ë° ìœ„ì¹˜
-            Vector2 brickPos = collision.transform.position;
-            //ê³µê³¼ ë²½ëŒì˜ ìœ„ì¹˜ ì°¨ì´
-            float dx = ballPos.x - brickPos.x; float dy = ballPos.y - brickPos.y;
-            //ë²½ëŒì˜ ì ˆë°˜ í¬ê¸°
-            float brickWidth = collision.bounds.size.x / 2;
-            float brickHeight = collision.bounds.size.y / 2;
-
-            //ìœ„,ì•„ë˜ ë©´ì— ë§ì•˜ì„ ë•Œ
-            if (Mathf.Abs(dx) < brickWidth)
-            {
-                //Y ë°©í–¥ ë°˜ì „
-                rigid.linearVelocity = new Vector2(rigid.linearVelocity.x, -rigid.linearVelocity.y);
-            }
-            // ì™¼ìª½,ì˜¤ë¥¸ìª½ ë©´ì— ë§ì•˜ì„ ë•Œ
-            else
-            {
-                // X ë°©í–¥ ë°˜ì „
-                rigid.linearVelocity = new Vector2(-rigid.linearVelocity.x, rigid.linearVelocity.y);
-            }
-
+            Vector2 direction = new Vector2(h, 1f).normalized; // ÆĞ³Î¿¡ ¸Â´Â À§Ä¡¿¡ µû¶ó ¹æÇâ °áÁ¤
+            rigid.linearVelocity = direction * speed; // ¼Óµµ Å©±â´Â ±×´ë·Î À¯Áö
         }
 
     }
 
-    //ê³µ ìƒíƒœ ì´ˆê¸°í™”
-    public void ResetBall()
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        // ë°œì‚¬ ì „ ìƒíƒœë¡œ ë³€ê²½
-        isLaunched = false;
+        if (collision.gameObject.CompareTag("wall"))
+        {
+            // ¹°¸® ¿£ÁøÀÌ °è»êÇÑ ¹İ»ç ¹æÇâÀ» ±×´ë·Î »ç¿ëÇÑ´Ù.
+            Vector2 direction = rigid.linearVelocity.normalized;
 
-        // ì‹œê°„ ì •ì§€
-        gameManager.timeManager.StopTimer();
+            // ¼Óµµ¸¸ ÀÏÁ¤ÇÏ°Ô ¸ÂÃá´Ù.
+            rigid.linearVelocity = direction * currentSpeed;
+        }
+    }
 
-        // ë¬¼ë¦¬ ê¸°ëŠ¥ ë„ê¸°
-        rigid.simulated = false;
+    //°ø »óÅÂ ÀúÀå ÇÔ¼ö
+    public void SaveBallState()
+    {
+        savedPosition = transform.position;
+        savedVelocity = rigid.linearVelocity;
+        savedSpeed = currentSpeed;
+        savedIsLaunched = isLaunched;
+    }
 
-        // í˜„ì¬ ì†ë„ ì œê±°
+    //°ø »óÅÂ º¹¿ø ÇÔ¼ö Ãß°¡(¹æÇâÀ¯Áö ¼Óµµ 30%°¨¼Ò)
+    public void RestoreBallState()
+    {
+        // ¹°¸® ±â´É ´Ù½Ã ÄÑ±â
+        rigid.simulated = true;
+
+        // ÀúÀåÇØ µĞ ÀÌµ¿ ¹æÇâÀ¸·Î ´Ù½Ã ¿òÁ÷ÀÎ´Ù.
+        if (savedVelocity != Vector2.zero)
+        {
+            rigid.linearVelocity =
+                savedVelocity.normalized * currentSpeed;
+        }
+
+        // ´Ù½Ã ¿òÁ÷ÀÌ´Â »óÅÂ·Î ¸¸µç´Ù.
+        isLaunched = savedIsLaunched;
+    }
+    //°ø ÀÏ½ÃÁ¤Áö
+    public void StopBall()
+    {
         rigid.linearVelocity = Vector2.zero;
-
-        // íšŒì „ ì†ë„ ì œê±°
         rigid.angularVelocity = 0f;
 
-        // ì¤‘ë ¥ ì›ë˜ëŒ€ë¡œ
-        rigid.gravityScale = 1f;
+        rigid.simulated = false;
 
-        // íŒ¨ë„ ê°€ìš´ë° ìœ„ë¡œ ì´ë™
+        isLaunched = false;
+    }
+
+    //°ø Å©±â °¨¼Ò
+    public void ReduceSize()
+    {
+        transform.localScale *= 0.7f;
+    }
+
+    // °ø ¼Óµµ¸¦ 70%·Î ÁÙÀÎ´Ù.
+    public void ReduceSpeed()
+    {
+        currentSpeed *= 0.7f;
+    }
+
+    //°ø »óÅÂ ÃÊ±âÈ­
+    public void ResetBall()
+    {
+        // ¹ß»ç Àü »óÅÂ·Î º¯°æ
+        isLaunched = false;
+
+        // ½ºÅ×ÀÌÁö ÀüÈ¯ »óÅÂµµ ÇØÁ¦
+        // ´Ù½Ã ¸¶¿ì½º·Î ¹ß»çÇÒ ¼ö ÀÖ°Ô ÇÑ´Ù.
+        isTransitioning = false;
+
+        // ¾Æ·¡ º®¿¡ ´ê¾Ò´Ù´Â »óÅÂµµ ÃÊ±âÈ­
+        isTouchDown = false;
+
+        // ½Ã°£ Á¤Áö
+        gameManager.timeManager.StopTimer();
+
+        // ¹°¸® ±â´É ²ô±â
+        rigid.simulated = false;
+
+        // ÇöÀç ¼Óµµ Á¦°Å
+        rigid.linearVelocity = Vector2.zero;
+
+        // È¸Àü ¼Óµµ Á¦°Å
+        rigid.angularVelocity = 0f;
+
+        // ÆĞ³Î °¡¿îµ¥ À§·Î ÀÌµ¿
         transform.position = new Vector3(panel.position.x,panel.position.y + offsetY,transform.position.z);
     }
 
-    // í”Œë˜ê·¸ ì§€ìš°ê¸°
+    // ÇÃ·¡±× Áö¿ì±â
     void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "wall")
         {
-            switch (collision.gameObject.name)
+            if (collision.gameObject.name == "downwall")
             {
-                case "leftwall":
-                    isTouchLeft = false;
-                    break;
-
-                case "rightwall":
-                    isTouchRight = false;
-                    break;
-
-                case "upwall":
-                    isTouchUp = false;
-                    break;
-                case "downwall":
-                    isTouchDown = false;
-                    break;
+                isTouchDown = false;
             }
 
         }

@@ -3,6 +3,7 @@ using UnityEngine;
 public class Brick : MonoBehaviour
 {
     public int hp = 3;
+    public bool isObstacle = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -14,26 +15,34 @@ public class Brick : MonoBehaviour
     {
         
     }
+
+    //µ¥¹ÌÁö¸¦ ÀÔ¾úÀ» ½Ã
     private void OnHit(int dmg)
     {
         hp -= dmg;
 
-        //í”¼ ë‹¤ ë‹³ë©´ ì‚¬ë¼ì§
+        //ÇÇ ´Ù ´â¸é »ç¶óÁü
         if (hp <= 0)
         {
             GameManager gamemanager = FindObjectOfType<GameManager>();
             Destroy(gameObject);
-            gamemanager.BrickDestroyed();
+
+            if(!isObstacle)
+            {
+                gamemanager.BrickDestroyed();
+            }
+
         }
     }
 
-    // ë°ë¯¸ì§€ ì¸¡ì •
+    // µ¥¹ÌÁö ÃøÁ¤
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "ball")
         {
-            ball Ball = collision.gameObject.GetComponent<ball>(); //ì¶©ëŒí•œ ì˜¤ë¸Œì íŠ¸ì—ì„œ ball ìŠ¤í¬ë¦½íŠ¸ ê°€ì ¸ì˜´
-            OnHit(Ball.power); //OnHitì— ë°ë¯¸ì§€ë¥¼ ë„£ì–´ ë°ë¯¸ì§€ ë§Œí¼ ì²´ë ¥ì´ ê¹ì´ê²Œ í•¨
+            ball Ball = collision.gameObject.GetComponent<ball>(); //Ãæµ¹ÇÑ ¿ÀºêÁ§Æ®¿¡¼­ ball ½ºÅ©¸³Æ® °¡Á®¿È
+            OnHit(Ball.power); //OnHit¿¡ µ¥¹ÌÁö¸¦ ³Ö¾î µ¥¹ÌÁö ¸¸Å­ Ã¼·ÂÀÌ ±ğÀÌ°Ô ÇÔ
         }
     }
+
 }
