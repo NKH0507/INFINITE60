@@ -5,22 +5,34 @@ using UnityEngine.InputSystem;
 
 public class ball : MonoBehaviour
 {
-    public bool isTouchLeft;
-    public bool isTouchRight;
-    public bool isTouchUp;
     public bool isTouchDown;
 
     public int power;
 
-    bool isLaunched = false;
+    public bool isLaunched = false;
     Vector2 startMousePos;
     Vector3 startBallPos;
+
+    public bool isTransitioning = false;
 
     Rigidbody2D rigid;
     public Transform panel;
     public float offsetY = 0.5f;
 
+    //전환 상태 저장 변수
+    Vector3 savedPosition;
+    Vector2 savedVelocity;
+    float savedSpeed;
+    bool savedIsLaunched;
+
     GameManager gameManager;
+
+    // 발사 방향 표시용 LineRenderer
+    public LineRenderer aimLine;
+
+    // 공의 고정 발사 속도
+    public float launchSpeed = 10f;
+    float currentSpeed;
 
     void Start()
     {
@@ -28,41 +40,46 @@ public class ball : MonoBehaviour
         rigid.simulated = false; // 발사 전에는 물리 영향을 받지 않게 함
         startBallPos = transform.position; // 현재 공의 위치를 저장
         gameManager = FindFirstObjectByType<GameManager>(); //GameManager 찾기
+        aimLine.enabled = false; // 처음에는 방향 표시 끄기
+        currentSpeed = launchSpeed;
     }
 
     void Update()
     {
-        //발사전
+        // 스테이지 전환 중에는
+        // 공 위치를 패널 위치로 강제로 이동시키지 않는다.
+        if (isTransitioning)
+        {
+            return;
+        }
+
+        // 발사 전
         if (!isLaunched)
         {
-            transform.position = new Vector3(panel.position.x, panel.position.y + offsetY, transform.position.z); //공 위치 고정
+            transform.position = new Vector3(
+                panel.position.x,
+                panel.position.y + offsetY,
+                transform.position.z
+            );
 
-            //좌클릭 하는 순간
+            // 좌클릭 하는 순간
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
-                startMousePos = Mouse.current.position.ReadValue(); //클릭위치 저장
-                startBallPos = transform.position; //공의 현재 위치 저장
-
+                startMousePos = Mouse.current.position.ReadValue();
+                startBallPos = transform.position;
+                aimLine.enabled = true;
             }
 
-            //좌클릭 하는 동안
-            if(Mouse.current.leftButton.isPressed)
+            // 좌클릭 하는 동안
+            if (Mouse.current.leftButton.isPressed)
             {
-                Vector2 mousePos = Mouse.current.position.ReadValue(); //현재 마우스 위치 가져옴
-                float mouseX = mousePos.x - startMousePos.x; //x방향 이동량
-                float mouseY = startMousePos.y - mousePos.y; //y방향 이동량
-                float moveX = mouseX * 0.01f; //좌우로 움직인 정도
-                float moveY = mouseY * 0.01f; //아래로 당긴 정도
-                //속도 제한
-                moveX = Mathf.Clamp(moveX, -2f, 2f); 
-                moveY = Mathf.Clamp(moveY, 0f, 3f);
-
-                //transform.position = startBallPos + new Vector3(moveX, -moveY, 0); //처음 공의 위치를 기준으로 당겨진 위치를 계산
+                ShowAimDirection();
             }
 
-            //마우스 뗏을때
-            if(Mouse.current.leftButton.wasReleasedThisFrame)
+            // 마우스 뗐을 때
+            if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
+                aimLine.enabled = false;
                 Launch();
             }
         }
@@ -70,34 +87,38 @@ public class ball : MonoBehaviour
         {
             ballmove();
         }
+    }
 
+    void ShowAimDirection()
+    {
+        Vector2 mousePos = Mouse.current.position.ReadValue(); // 현재 마우스 위치
+        // 마우스를 움직인 거리
+        float mouseX = mousePos.x - startMousePos.x;
+        float mouseY = startMousePos.y - mousePos.y;
+
+        float directionX = mouseX * 0.01f; // 좌우 방향
+        directionX = Mathf.Clamp(directionX, -1.8f, 1.8f); // 너무 많이 꺾이지 않도록 제한
+        float directionY = 1f; // 위쪽 방향
+        Vector2 direction = new Vector2(directionX, directionY).normalized; // 발사 방향
+        aimLine.SetPosition(0, transform.position); // LineRenderer 시작점
+        float lineLength = 2.5f; // 화살표 길이
+        Vector3 endPosition = transform.position + (Vector3)(direction * lineLength); // LineRenderer 끝점
+        aimLine.SetPosition(1, endPosition); //선 긋기
     }
 
     void Launch()
     {
-        Vector2 mousePos = Mouse.current.position.ReadValue(); //마우스 위치
-        //마우스 이동거리 계산
+        Vector2 mousePos = Mouse.current.position.ReadValue();
+        // 마우스를 당긴 방향 계산
         float mouseX = mousePos.x - startMousePos.x;
-        float mouseY = startMousePos.y - mousePos.y;
-        float directionX = mouseX * 0.01f; //좌우 방향 계산
-        directionX = Mathf.Clamp(directionX, -2f, 2f); //크게 꺾이지 않도록 제한
-        float strong = mouseY * 0.05f; //힘 계산
-
-        //최소 발사 힘
-        if (strong < 2f)
-        { 
-            strong = 2f; 
-        }
-
-        //발사 방향 정하기
-        float directionY = 1f; 
-        Vector2 direction = new Vector2(directionX, directionY);
-        //발사기능
-        direction = direction.normalized; //방향 크기 1로
-        rigid.simulated = true; //물리 기능 활성화
-        rigid.linearVelocity = direction * strong; // 계산된 방향과 힘으로 발사
-        isLaunched = true;
-        gameManager.timeManager.StartTimer(); //시간 시작
+        float directionX = mouseX * 0.01f; // 좌우 방향
+        directionX = Mathf.Clamp(directionX, -2f, 2f); // 너무 많이 꺾이지 않도록 제한
+        float directionY = 1f; // 위쪽 방향
+        Vector2 direction = new Vector2(directionX, directionY).normalized; // 발사 방향
+        rigid.simulated = true; // 물리 기능 켜기
+        rigid.linearVelocity = direction * currentSpeed;// 현재 속도로 공 발사
+        isLaunched = true; // 발사 상태
+        gameManager.timeManager.StartTimer(); // 시간 시작
     }
 
     void ballmove()
@@ -112,37 +133,16 @@ public class ball : MonoBehaviour
     {
         if (collision.gameObject.tag == "wall")
         {
-            switch (collision.gameObject.name)
+            if (collision.gameObject.name == "downwall")
             {
-                // 왼쪽 벽에 부딪힘
-                case "leftwall":
-                    isTouchLeft = true;
-                    // X 방향 반전
-                    rigid.linearVelocity = new Vector2(-rigid.linearVelocity.x, rigid.linearVelocity.y);
-                    break;
-                // 오른쪽 벽에 부딪힘
-                case "rightwall":
-                    isTouchRight = true;
-                    // X 방향 반전
-                    rigid.linearVelocity = new Vector2(-rigid.linearVelocity.x, rigid.linearVelocity.y);
-                    break;
-                // 위쪽 벽에 부딪힘
-                case "upwall":
-                    isTouchUp = true;
-                    // Y 방향 반전
-                    rigid.linearVelocity = new Vector2(rigid.linearVelocity.x, -rigid.linearVelocity.y);
-                    break;
-                case "downwall":
-                    isTouchDown = true;
-                    gameManager.BallFell(); // 공이 떨어졌다고 GameManager에 알림
-                    break;
+                isTouchDown = true;
+                gameManager.BallFell(); // 공이 떨어졌다고 GameManager에 알림
             }
 
         }
         else if (collision.gameObject.tag == "panel")
         {
-            // 패널에 맞으면 중력을 약하게 함
-            rigid.gravityScale = 0.2f;
+            float speed = rigid.linearVelocity.magnitude; // 현재 공의 속도
 
             // 패널의 가운데 X 좌표
             float panelCenter = collision.transform.position.x;
@@ -156,47 +156,70 @@ public class ball : MonoBehaviour
             // -1 ~ 1 사이의 값으로 변환
             float h = hitPoint / panelWidth;
 
-            // 현재 공의 속력
-            float speed = rigid.linearVelocity.magnitude;
-
-            // 방향을 결정
-            float x = h; 
-            float y = 1f;
-
-            //방향은 그대로 유지하면서 크기만 1로
-            Vector2 direction = new Vector2(x, y).normalized;
-
-            // 기존 속력 유지
-            rigid.linearVelocity = direction * speed;
-
+            Vector2 direction = new Vector2(h, 1f).normalized; // 패널에 맞는 위치에 따라 방향 결정
+            rigid.linearVelocity = direction * speed; // 속도 크기는 그대로 유지
         }
-        else if (collision.gameObject.tag == "brick")
+
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("wall"))
         {
-            // 공의 현재 위치
-            Vector2 ballPos = transform.position;
-            // 벽돌의 가운데 위치
-            Vector2 brickPos = collision.transform.position;
-            //공과 벽돌의 위치 차이
-            float dx = ballPos.x - brickPos.x; float dy = ballPos.y - brickPos.y;
-            //벽돌의 절반 크기
-            float brickWidth = collision.bounds.size.x / 2;
-            float brickHeight = collision.bounds.size.y / 2;
+            // 물리 엔진이 계산한 반사 방향을 그대로 사용한다.
+            Vector2 direction = rigid.linearVelocity.normalized;
 
-            //위,아래 면에 맞았을 때
-            if (Mathf.Abs(dx) < brickWidth)
-            {
-                //Y 방향 반전
-                rigid.linearVelocity = new Vector2(rigid.linearVelocity.x, -rigid.linearVelocity.y);
-            }
-            // 왼쪽,오른쪽 면에 맞았을 때
-            else
-            {
-                // X 방향 반전
-                rigid.linearVelocity = new Vector2(-rigid.linearVelocity.x, rigid.linearVelocity.y);
-            }
+            // 속도만 일정하게 맞춘다.
+            rigid.linearVelocity = direction * currentSpeed;
+        }
+    }
 
+    //공 상태 저장 함수
+    public void SaveBallState()
+    {
+        savedPosition = transform.position;
+        savedVelocity = rigid.linearVelocity;
+        savedSpeed = currentSpeed;
+        savedIsLaunched = isLaunched;
+    }
+
+    //공 상태 복원 함수 추가(방향유지 속도 30%감소)
+    public void RestoreBallState()
+    {
+        // 물리 기능 다시 켜기
+        rigid.simulated = true;
+
+        // 저장해 둔 이동 방향으로 다시 움직인다.
+        if (savedVelocity != Vector2.zero)
+        {
+            rigid.linearVelocity =
+                savedVelocity.normalized * currentSpeed;
         }
 
+        // 다시 움직이는 상태로 만든다.
+        isLaunched = savedIsLaunched;
+    }
+    //공 일시정지
+    public void StopBall()
+    {
+        rigid.linearVelocity = Vector2.zero;
+        rigid.angularVelocity = 0f;
+
+        rigid.simulated = false;
+
+        isLaunched = false;
+    }
+
+    //공 크기 감소
+    public void ReduceSize()
+    {
+        transform.localScale *= 0.7f;
+    }
+
+    // 공 속도를 70%로 줄인다.
+    public void ReduceSpeed()
+    {
+        currentSpeed *= 0.7f;
     }
 
     //공 상태 초기화
@@ -204,6 +227,13 @@ public class ball : MonoBehaviour
     {
         // 발사 전 상태로 변경
         isLaunched = false;
+
+        // 스테이지 전환 상태도 해제
+        // 다시 마우스로 발사할 수 있게 한다.
+        isTransitioning = false;
+
+        // 아래 벽에 닿았다는 상태도 초기화
+        isTouchDown = false;
 
         // 시간 정지
         gameManager.timeManager.StopTimer();
@@ -217,9 +247,6 @@ public class ball : MonoBehaviour
         // 회전 속도 제거
         rigid.angularVelocity = 0f;
 
-        // 중력 원래대로
-        rigid.gravityScale = 1f;
-
         // 패널 가운데 위로 이동
         transform.position = new Vector3(panel.position.x,panel.position.y + offsetY,transform.position.z);
     }
@@ -229,22 +256,9 @@ public class ball : MonoBehaviour
     {
         if (collision.gameObject.tag == "wall")
         {
-            switch (collision.gameObject.name)
+            if (collision.gameObject.name == "downwall")
             {
-                case "leftwall":
-                    isTouchLeft = false;
-                    break;
-
-                case "rightwall":
-                    isTouchRight = false;
-                    break;
-
-                case "upwall":
-                    isTouchUp = false;
-                    break;
-                case "downwall":
-                    isTouchDown = false;
-                    break;
+                isTouchDown = false;
             }
 
         }
