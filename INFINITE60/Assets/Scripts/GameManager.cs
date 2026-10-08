@@ -44,6 +44,12 @@ public class GameManager : MonoBehaviour
 
         // 생성된 벽돌 개수 저장
         startBrickCount = stageManager.GetBrickCount();
+
+        // 다음 스테이지가 존재하면 위쪽에 미리 생성
+        if (currentStage < stages.Length)
+        {
+            stageManager.CreateWaitingStage(stages[currentStage]);
+        }
     }
 
 

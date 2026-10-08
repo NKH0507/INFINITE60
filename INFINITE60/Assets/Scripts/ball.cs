@@ -30,6 +30,19 @@ public class ball : MonoBehaviour
     // 발사 방향 표시용 LineRenderer
     public LineRenderer aimLine;
 
+    // 화살촉 왼쪽과 오른쪽 선
+    public LineRenderer arrowLeft;
+    public LineRenderer arrowRight;
+
+    // 화살표 길이
+    public float arrowLength = 2.5f;
+
+    // 화살촉 길이
+    public float arrowHeadLength = 0.4f;
+
+    // 화살촉 벌어지는 각도
+    public float arrowHeadAngle = 30f;
+
     // 공의 고정 발사 속도
     public float launchSpeed = 10f;
     float currentSpeed;
@@ -40,7 +53,12 @@ public class ball : MonoBehaviour
         rigid.simulated = false; // 발사 전에는 물리 영향을 받지 않게 함
         startBallPos = transform.position; // 현재 공의 위치를 저장
         gameManager = FindFirstObjectByType<GameManager>(); //GameManager 찾기
-        aimLine.enabled = false; // 처음에는 방향 표시 끄기
+
+        // 처음에는 방향 표시 끄기
+        aimLine.enabled = false;
+        arrowLeft.enabled = false;
+        arrowRight.enabled = false;
+
         currentSpeed = launchSpeed;
     }
 
@@ -67,19 +85,27 @@ public class ball : MonoBehaviour
             {
                 startMousePos = Mouse.current.position.ReadValue();
                 startBallPos = transform.position;
-                aimLine.enabled = true;
             }
 
             // 좌클릭 하는 동안
             if (Mouse.current.leftButton.isPressed)
             {
                 ShowAimDirection();
+
+                // 화살표 표시
+                aimLine.enabled = true;
+                arrowLeft.enabled = true;
+                arrowRight.enabled = true;
             }
 
             // 마우스 뗐을 때
             if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
+                // 화살표 숨기기
                 aimLine.enabled = false;
+                arrowLeft.enabled = false;
+                arrowRight.enabled = false;
+
                 Launch();
             }
         }
@@ -92,18 +118,35 @@ public class ball : MonoBehaviour
     void ShowAimDirection()
     {
         Vector2 mousePos = Mouse.current.position.ReadValue(); // 현재 마우스 위치
-        // 마우스를 움직인 거리
-        float mouseX = mousePos.x - startMousePos.x;
-        float mouseY = startMousePos.y - mousePos.y;
+        float mouseX = mousePos.x - startMousePos.x; // 마우스 좌우 이동 거리
 
-        float directionX = mouseX * 0.01f; // 좌우 방향
-        directionX = Mathf.Clamp(directionX, -1.8f, 1.8f); // 너무 많이 꺾이지 않도록 제한
-        float directionY = 1f; // 위쪽 방향
-        Vector2 direction = new Vector2(directionX, directionY).normalized; // 발사 방향
-        aimLine.SetPosition(0, transform.position); // LineRenderer 시작점
-        float lineLength = 2.5f; // 화살표 길이
-        Vector3 endPosition = transform.position + (Vector3)(direction * lineLength); // LineRenderer 끝점
-        aimLine.SetPosition(1, endPosition); //선 긋기
+        // 발사 방향 계산
+        float directionX = mouseX * 0.01f;
+        directionX = Mathf.Clamp(directionX, -2f, 2f);
+        Vector2 direction = new Vector2(directionX, 1f).normalized;
+
+        // 화살표 시작 위치 (공 위치)
+        Vector3 startPosition = transform.position; // 화살표 시작 위치 (공 위치)
+        Vector3 endPosition = startPosition + (Vector3)(direction * arrowLength); // 화살표 끝 위치
+
+        // 화살표 몸통
+        aimLine.positionCount = 2;
+        aimLine.SetPosition(0, startPosition);
+        aimLine.SetPosition(1, endPosition);
+
+        // 화살촉 방향 계산
+        Vector2 leftDirection =  Quaternion.Euler(0f, 0f, 180f - arrowHeadAngle) * direction;
+        Vector2 rightDirection = Quaternion.Euler(0f, 0f, 180f + arrowHeadAngle) * direction;
+
+        // 왼쪽 화살촉
+        arrowLeft.positionCount = 2;
+        arrowLeft.SetPosition(0, endPosition);
+        arrowLeft.SetPosition(1,endPosition + (Vector3)(leftDirection * arrowHeadLength));
+
+        // 오른쪽 화살촉
+        arrowRight.positionCount = 2;
+        arrowRight.SetPosition(0, endPosition);
+        arrowRight.SetPosition(1,endPosition + (Vector3)(rightDirection * arrowHeadLength));
     }
 
     void Launch()
