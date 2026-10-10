@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     // 시간 관리
     public TimeManager timeManager;
 
+    public bossmanager bossManager;
+
     void Start()
     {
         // 게임 시작할 때 카메라 크기 저장
@@ -113,13 +115,35 @@ public class GameManager : MonoBehaviour
         {
             yield return StartCoroutine(stageManager.StageTransition(stages[currentStage - 1],ChangeStageFinished)); // StageManager에게 스테이지 전환을 맡긴다.
         }
+
     }
 
     // 스테이지 전환이 끝난 후 실행되는 함수
     void ChangeStageFinished()
     {
+        // 보스 스테이지
+        if (currentStage % 2 == 0)
+        {
+            int chapter = currentStage / 2;
+            bossManager.StartBoss(chapter);
+        }
+
         startBrickCount = stageManager.GetBrickCount(); // 새로 생성된 스테이지의 전체 벽돌 개수를 저장한다.
         isChangingStage = false; // 스테이지 전환이 끝났다고 표시
+    }
+
+    public void OnBrickDestroyed(Brick brick)
+    {
+        // 보스 스테이지
+        if (bossManager != null && bossManager.IsBossStage())
+        {
+            bossManager.BrickDestroyed(brick);
+        }
+        else
+        {
+            // 일반 스테이지
+            BrickDestroyed();
+        }
     }
 
     // 공 초기 상태로 되돌림

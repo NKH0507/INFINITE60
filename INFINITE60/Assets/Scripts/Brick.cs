@@ -16,23 +16,43 @@ public class Brick : MonoBehaviour
         
     }
 
-    //데미지를 입었을 시
+    // 벽돌 중복 파괴 방지
+    bool isDestroyed = false;
+
+    // 데미지를 입었을 시
     private void OnHit(int dmg)
     {
+        // 이미 파괴된 벽돌이라면 무시
+        if (isDestroyed)
+        {
+            return;
+        }
+
         hp -= dmg;
 
-        //피 다 닳면 사라짐
+        // 피가 다 닳으면 사라짐
         if (hp <= 0)
         {
-            GameManager gamemanager = FindObjectOfType<GameManager>();
-            Destroy(gameObject);
+            isDestroyed = true;
 
-            if(!isObstacle)
+            GameManager gamemanager = FindFirstObjectByType<GameManager>();
+
+            // 현재 스테이지의 벽돌 파괴 시 코인 1개 획득
+            if (!isObstacle && CoinManager.Instance != null)
             {
-                gamemanager.BrickDestroyed();
+                CoinManager.Instance.AddCoin(1);
             }
 
+            // 기존 스테이지 / 보스 스테이지 처리
+            if (!isObstacle && gamemanager != null)
+            {
+                gamemanager.OnBrickDestroyed(this);
+            }
+
+            // 벽돌 삭제
+            Destroy(gameObject);
         }
+
     }
 
     // 데미지 측정
