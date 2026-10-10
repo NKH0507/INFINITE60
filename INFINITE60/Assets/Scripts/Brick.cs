@@ -37,8 +37,8 @@ public class Brick : MonoBehaviour
 
             GameManager gamemanager = FindFirstObjectByType<GameManager>();
 
-            // 현재 스테이지의 벽돌 파괴 시 코인 1개 획득
-            if (!isObstacle && CoinManager.Instance != null)
+            // 벽돌 파괴 시 코인 1개 획득
+            if (CoinManager.Instance != null)
             {
                 CoinManager.Instance.AddCoin(1);
             }
