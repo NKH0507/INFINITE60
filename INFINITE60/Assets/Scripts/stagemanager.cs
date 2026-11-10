@@ -11,6 +11,15 @@ public class stagemanager : MonoBehaviour
     public panelmove Panel;
     public float transitionTime = 2f;
 
+    // 위에서 대기하는 스테이지
+    GameObject waitingStage;
+
+    // 스테이지가 실제로 플레이되는 위치
+    public Vector3 playPosition = new Vector3(0f, 0f, 0f);
+
+    // 다음 스테이지가 대기하는 위치
+    public Vector3 waitPosition = new Vector3(0f, 4f, 0f);
+
     // 현재 스테이지에 남아있는 일반 벽돌을 가져온다.
     // 이미 장애물이 된 벽돌은 제외한다.
     public Brick[] GetRemainBricks()
@@ -49,18 +58,18 @@ public class stagemanager : MonoBehaviour
         return remainBricks;
     }
 
-    // StageData에 저장된 스테이지 프리팹을 생성한다.
+    // 스테이지 생성
     public void CreateStage(stage stageData)
     {
+        // 플레이 위치에 생성
+        currentStage = Instantiate(stageData.stagePrefab,playPosition,Quaternion.identity);
+    }
 
-        // 기존 스테이지가 남아있으면 삭제
-        if (currentStage != null)
-        {
-            Destroy(currentStage);
-        }
-
-        // StageData에 저장된 프리팹을 생성
-        currentStage = Instantiate(stageData.stagePrefab,Vector3.zero,Quaternion.identity);
+    // 다음 스테이지를 위쪽에 미리 생성
+    public void CreateWaitingStage(stage stageData)
+    {
+        // 화면 위쪽에 생성
+        waitingStage = Instantiate(stageData.stagePrefab,waitPosition,Quaternion.identity);
     }
 
     // 스테이지 전환을 실행하는 함수
@@ -73,9 +82,8 @@ public class stagemanager : MonoBehaviour
         Ball.StopBall(); // 공 일시정지
         Panel.enabled = false; // 패널 일시정지
 
-        // 시간 일시정지 + 새 시간으로 초기화
+        // 시간 일시정지
         gameManager.timeManager.StopTimer();
-        gameManager.timeManager.ResetTime();
 
         // 2. 현재 스테이지의 남은 벽돌 가져오기
         Brick[] remainBricks = GetRemainBricks();
@@ -96,8 +104,18 @@ public class stagemanager : MonoBehaviour
             }
         }
 
-        // 4. 다음 스테이지 생성
-        CreateStage(nextStage);
+        // 4. 위에서 대기 중인 스테이지 사용
+        GameObject nextStageObject = waitingStage;
+
+        // 대기 스테이지가 없다면 생성
+        if (nextStageObject == null)
+        {
+            nextStageObject = Instantiate(nextStage.stagePrefab,waitPosition,Quaternion.identity);
+        }
+
+        waitingStage = null; // 대기 스테이지 참조 해제
+        currentStage = nextStageObject; // 새로운 스테이지를 현재 스테이지로 지정
+        Vector3 nextStartPosition = currentStage.transform.position; // 이동 시작 위치 저장
 
         // 5. 남은 벽돌의 원래 위치와 크기 저장
         Vector3[] startPositions = new Vector3[remainBricks.Length];
@@ -146,6 +164,7 @@ public class stagemanager : MonoBehaviour
         {
             time += Time.deltaTime;
             float t = Mathf.Clamp01(time / transitionTime);
+            currentStage.transform.position = Vector3.Lerp(nextStartPosition,playPosition,t); // 다음 스테이지 전체를 위에서 아래로 이동
 
             // 벽돌 이동
             for (int i = 0; i < remainBricks.Length; i++)
@@ -165,6 +184,7 @@ public class stagemanager : MonoBehaviour
         // 최종 위치 정확하게 적용
         Ball.transform.position = ballTargetPosition;
         Ball.transform.localScale =  ballTargetScale;
+        currentStage.transform.position = playPosition;
 
         // 9. 연출이 끝난 후 공 크기와 속도 감소 및 패널 활성화
         //Ball.ReduceSize();
@@ -172,10 +192,19 @@ public class stagemanager : MonoBehaviour
         Ball.RestoreBallState();
         Panel.enabled = true;
 
-        // 10. 시간 다시 시작
+        // 10. 시간증가 및 다시 시작
+        gameManager.timeManager.PlusTimer();
         gameManager.timeManager.StartTimer();
 
-        // 11. 게임매니저에게 전환 완료 알림
+        // 11. 그다음 스테이지를 위쪽에 미리 생성
+        int nextIndex = gameManager.currentStage;
+
+        if (nextIndex < gameManager.stages.Length)
+        {
+            CreateWaitingStage(gameManager.stages[nextIndex]);
+        }
+
+        // 12. 게임매니저에게 전환 완료 알림
         if (onFinished != null)
         {
             onFinished();

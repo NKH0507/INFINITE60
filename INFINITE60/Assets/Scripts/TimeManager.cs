@@ -12,6 +12,9 @@ public class TimeManager : MonoBehaviour
     // 공이 떨어졌을 때 감소하는 시간
     public float fallTimePenalty = 20f;
 
+    //시간 추가
+    public float plusTime = 5f;
+
     // 현재 남은 시간
     public float remainTime;
 
@@ -81,6 +84,13 @@ public class TimeManager : MonoBehaviour
     public void StopTimer()
     {
         isRunning = false;
+    }
+
+    // 시간 추가
+    public void PlusTimer()
+    {
+        // 시간 20초 감소
+        remainTime += plusTime;
     }
 
     // 공이 떨어졌을 때
