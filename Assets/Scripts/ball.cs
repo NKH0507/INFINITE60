@@ -64,6 +64,14 @@ public class ball : MonoBehaviour
 
     void Update()
     {
+
+        // 일시정지 중이면 공 조작 불가능
+        if (Time.timeScale == 0f)
+        {
+            return;
+        }
+
+
         // 스테이지 전환 중에는
         // 공 위치를 패널 위치로 강제로 이동시키지 않는다.
         if (isTransitioning)

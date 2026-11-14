@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -36,8 +38,17 @@ public class GameManager : MonoBehaviour
 
     public bossmanager bossManager;
 
+    // 일시정지 메뉴
+    public GameObject Resume;
+    public GameObject menu;
+
+    // 일시정지 상태인지 확인
+    public bool isPaused = false;
+
     void Start()
     {
+        Resume.SetActive(false);
+
         // 게임 시작할 때 카메라 크기 저장
         startCameraSize = mainCamera.orthographicSize;
 
@@ -53,7 +64,6 @@ public class GameManager : MonoBehaviour
             stageManager.CreateWaitingStage(stages[currentStage]);
         }
     }
-
 
     // 벽돌이 하나 깨질 때마다 호출할 함수
     public void BrickDestroyed()
@@ -150,5 +160,21 @@ public class GameManager : MonoBehaviour
     public void ResetBall()
     {
         ball.GetComponent<ball>().ResetBall();
+    }
+
+    // 게임 일시정지
+    public void PauseGame()
+    {
+        isPaused = true; // 일시정지 상태
+        Resume.SetActive(true);
+        Time.timeScale = 0f; // 게임 시간 정지
+    }
+
+    // 게임 재개
+    public void ResumeGame()
+    {
+        isPaused = false; // 일시정지 해제
+        Time.timeScale = 1f; // 시간 다시 돌아감
+        Resume.SetActive(false);
     }
 }
