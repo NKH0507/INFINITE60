@@ -7,6 +7,7 @@ public class CoinManager : MonoBehaviour
     public static CoinManager Instance; // 다른 스크립트에서 접근할 수 있도록 설정
     public int coin = 0; // 현재 보유 코인
     TMP_Text coinText; // 코인 표시 텍스트
+    public int earnedCoin = 0; // 이번 게임에서 얻은 코인
 
     void Awake()
     {
@@ -81,10 +82,17 @@ public class CoinManager : MonoBehaviour
             return;
         }
 
-        coin += amount;
+        coin += amount;       // 전체 보유 코인 증가
+        earnedCoin += amount; // 이번 게임에서 얻은 코인 증가
 
         SaveCoin();
         UpdateCoinText();
+    }
+
+    // 이번 게임에서 얻은 코인 초기화
+    public void ResetEarnedCoin()
+    {
+        earnedCoin = 0;
     }
 
     // 코인 사용
