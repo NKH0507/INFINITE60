@@ -18,6 +18,12 @@ public class panelmove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // 일시정지 중이면 공 조작 불가능
+        if (Time.timeScale == 0f)
+        {
+            return;
+        }
+
         Move();
     }
     void Move()

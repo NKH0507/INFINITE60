@@ -23,6 +23,8 @@ public class TimeManager : MonoBehaviour
 
     // 게임 오버 여부
     bool isGameOver = false;
+    // 게임 매니저
+    public GameManager gameManager;
 
     void Start()
     {
@@ -131,17 +133,16 @@ public class TimeManager : MonoBehaviour
         timeText.text = "TIME : " + Mathf.Ceil(remainTime);
     }
 
-    /// 게임오버 씬으로 이동으로 변경예정
-    // 게임 오버
+    // 게임오버 씬으로 이동
     void GameOver()
     {
+        // 게임 오버 상태로 변경
         isGameOver = true;
+
+        // 타이머 정지
         isRunning = false;
 
-        Application.Quit();
-
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#endif
+        // 게임 종료 결과 화면 표시
+        gameManager.ShowResult();
     }
 }

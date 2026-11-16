@@ -1,6 +1,10 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.InputSystem;
+using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -36,8 +40,31 @@ public class GameManager : MonoBehaviour
 
     public bossmanager bossManager;
 
+    // 일시정지 상태인지 확인
+    public bool isPaused = false;
+
+    // 일시정지 메뉴
+    public GameObject pauseMenu;
+
+    // 결과 화면
+    public GameObject resultPanel;
+
+    // 결과 화면 텍스트
+    public TMP_Text resultStageText;
+    public TMP_Text resultCoinText;
+
+    // 메인 메뉴 씬 이름
+    public string mainMenuSceneName = "StartScene";
+
+    // 코인 매니저
+    public CoinManager coinManager;
+
     void Start()
     {
+        Time.timeScale = 1f;
+        pauseMenu.SetActive(false);
+        resultPanel.SetActive(false);
+
         // 게임 시작할 때 카메라 크기 저장
         startCameraSize = mainCamera.orthographicSize;
 
@@ -52,8 +79,14 @@ public class GameManager : MonoBehaviour
         {
             stageManager.CreateWaitingStage(stages[currentStage]);
         }
-    }
 
+        // 이번 게임에서 얻은 코인 초기화
+        if (CoinManager.Instance != null)
+        {
+            CoinManager.Instance.ResetEarnedCoin();
+        }
+
+    }
 
     // 벽돌이 하나 깨질 때마다 호출할 함수
     public void BrickDestroyed()
@@ -150,5 +183,64 @@ public class GameManager : MonoBehaviour
     public void ResetBall()
     {
         ball.GetComponent<ball>().ResetBall();
+    }
+
+    // 게임 일시정지
+    public void PauseGame()
+    {
+        isPaused = true; // 일시정지 상태
+        Time.timeScale = 0f; // 게임 시간 정지
+        // 일시정지 UI 표시
+        pauseMenu.SetActive(true);
+    }
+
+    // 게임 재개
+    public void ResumeGame()
+    {
+        isPaused = false; // 일시정지 해제
+        Time.timeScale = 1f; // 시간 다시 돌아감
+        pauseMenu.SetActive(false);
+    }
+
+    // 처음부터 다시 시작
+    public void RestartGame()
+    {
+        // 일시정지 해제
+        Time.timeScale = 1f;
+        isPaused = false;
+
+        // 현재 게임 씬을 다시 불러옴
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    // 메인 메뉴로 이동
+    public void GoMainMenu()
+    {
+        // 일시정지 해제
+        Time.timeScale = 1f;
+        isPaused = false;
+
+        // 메인 메뉴 씬 불러오기
+        SceneManager.LoadScene("StartScene");
+    }
+
+    // 게임 종료 결과 화면 표시
+    public void ShowResult()
+    {
+        // 게임 멈춤
+        Time.timeScale = 0f;
+        isPaused = true;
+
+        // 결과 텍스트 표시
+        resultStageText.text = "stage : " + currentStage;
+
+        // 이번 게임에서 획득한 코인 표시
+        if (CoinManager.Instance != null)
+        {
+            resultCoinText.text = "coin : " + CoinManager.Instance.earnedCoin;
+        }
+
+        // 결과창 표시
+        resultPanel.SetActive(true);
     }
 }
