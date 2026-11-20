@@ -749,7 +749,7 @@ GameObject:
   - component: {fileID: 574614373}
   - component: {fileID: 574614375}
   m_Layer: 0
-  m_Name: panel
+  m_Name: paddle
   m_TagString: panel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3888,13 +3888,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c2cbdc15872cc4aa8d31d3ae87ec25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  mainCamera: {fileID: 1674688850}
   ball: {fileID: 2129900330}
   panel: {fileID: 574614370}
   stageManager: {fileID: 1984313836}
   currentStage: 1
   stages:
   - {fileID: 11400000, guid: a4c82f8b4e7d2254787f6d016cb28cd0, type: 2}
+  - {fileID: 11400000, guid: da5a8335658823e4ea6e09221fe40653, type: 2}
+  - {fileID: 11400000, guid: 209b3411f8f110e4f87b692a2fb17153, type: 2}
+  - {fileID: 11400000, guid: 5c75dc27ebd7b6b459d11415bb1fbfdc, type: 2}
+  - {fileID: 11400000, guid: 54c08a48e2a23c3438e6d5e498fdb088, type: 2}
+  - {fileID: 11400000, guid: d4c7f5e916b85fb44ba3bcb696afba54, type: 2}
+  - {fileID: 11400000, guid: 6e1b0a2118b5a89418f894d2f6a99ec7, type: 2}
   - {fileID: 11400000, guid: 976b48551b3eecb42a07f1703116f1a2, type: 2}
   timeManager: {fileID: 494864735}
   bossManager: {fileID: 1536047580}
@@ -3905,6 +3910,9 @@ MonoBehaviour:
   resultCoinText: {fileID: 1320150536}
   mainMenuSceneName: StartScene
   coinManager: {fileID: 867250617}
+  firstStagePower: 10
+  absorbRate: 0.1
+  zoomRate: 0.8
 --- !u!4 &1848853672
 Transform:
   m_ObjectHideFlags: 0
@@ -4448,7 +4456,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ball
   isTouchDown: 0
-  power: 1
+  power: 10
+  growSpeed: 10
   isLaunched: 0
   isTransitioning: 0
   panel: {fileID: 574614372}
@@ -4460,6 +4469,8 @@ MonoBehaviour:
   arrowHeadLength: 0.4
   arrowHeadAngle: 30
   launchSpeed: 10
+  attackPower: 10
+  absorptionRate: 0.1
 --- !u!120 &2129900336
 LineRenderer:
   serializedVersion: 3
