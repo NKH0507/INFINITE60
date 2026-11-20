@@ -4,21 +4,22 @@ using UnityEngine;
 
 public class Chapter1Boss : MonoBehaviour, IBossChapter
 {
-    public stagemanager stageManager;
-    public stage bossStageData; // 원본 배치 데이터
+    public StageManager stageManager;
+    public Stage bossStageData; // 원본 배치 데이터
     public GameObject lockPrefab; // 자물쇠 이미지 프리팹
+    public GameManager gameManager;
     public int requiredLockCount = 5; // 클리어에 필요한 자물쇠 파괴 횟수
     int destroyedLockCount = 0; // 현재 자물쇠 파괴 횟수
     Brick lockedBrick;
     HashSet<Brick> remainingBricks = new HashSet<Brick>(); // 남아 있는 벽돌
-    bossmanager manager;
+    BossManager manager;
     Coroutine reloadCoroutine; // 배치 재생성 코루틴
     // 보스 진행 상태
     bool isActive = false;
     bool isCleared = false;
 
     // 1챕터 보스 시작
-    public void StartBoss(bossmanager bossManager)
+    public void StartBoss(BossManager bossManager)
     {
         manager = bossManager;
         destroyedLockCount = 0;
@@ -149,7 +150,7 @@ public class Chapter1Boss : MonoBehaviour, IBossChapter
         reloadCoroutine = null;
     }
 
-    // 1챕터 보스 클리어
+    // 보스 클리어
     void BossClear()
     {
         if (isCleared)
@@ -189,4 +190,5 @@ public class Chapter1Boss : MonoBehaviour, IBossChapter
         remainingBricks.Clear();
         lockedBrick = null;
     }
+
 }

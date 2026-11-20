@@ -11,6 +11,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b22a7232e3f13234f9b065f781935ff7, type: 3}
   m_Name: StageData_4
-  m_EditorClassIdentifier: Assembly-CSharp::stage
+  m_EditorClassIdentifier: Assembly-CSharp::Stage
   stageNumber: 4
   stagePrefab: {fileID: 7489307605012159776, guid: c8908be8402dbb64a983780d6bebdaa1, type: 3}

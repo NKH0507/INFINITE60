@@ -2313,21 +2313,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c53b77652c3f42e49a45faa22d381a51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PanelChange
-  HomePanel: {fileID: 1430565351}
-  UpgradePanel: {fileID: 808543174}
-  UpgradeText: {fileID: 1582573363}
-  UpgradeButton1: {fileID: 381617557}
-  UpgradeButton2: {fileID: 424705904}
-  UpgradeButton3: {fileID: 571858771}
-  UpgradeButton4: {fileID: 99947679}
-  SkinPanel: {fileID: 425770901}
-  SkinButton1: {fileID: 148937625}
-  SkinButton2: {fileID: 240754877}
-  SkinButton3: {fileID: 488486142}
-  SkinButton4: {fileID: 624904526}
-  SkinText: {fileID: 221786970}
-  StartButton: {fileID: 691950125}
-  Title: {fileID: 1556298941}
+  homePanel: {fileID: 1430565351}
+  upgradePanel: {fileID: 808543174}
+  upgradeText: {fileID: 1582573363}
+  upgradeButton1: {fileID: 381617557}
+  upgradeButton2: {fileID: 424705904}
+  upgradeButton3: {fileID: 571858771}
+  upgradeButton4: {fileID: 99947679}
+  skinPanel: {fileID: 425770901}
+  skinButton1: {fileID: 148937625}
+  skinButton2: {fileID: 240754877}
+  skinButton3: {fileID: 488486142}
+  skinButton4: {fileID: 624904526}
+  skinText: {fileID: 221786970}
+  startButton: {fileID: 691950125}
+  title: {fileID: 1556298941}
 --- !u!1 &1109876348
 GameObject:
   m_ObjectHideFlags: 0
@@ -3126,21 +3126,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c53b77652c3f42e49a45faa22d381a51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PanelChange
-  HomePanel: {fileID: 1430565351}
-  UpgradePanel: {fileID: 808543174}
-  UpgradeText: {fileID: 1582573363}
-  UpgradeButton1: {fileID: 381617557}
-  UpgradeButton2: {fileID: 424705904}
-  UpgradeButton3: {fileID: 571858771}
-  UpgradeButton4: {fileID: 99947679}
-  SkinPanel: {fileID: 425770901}
-  SkinButton1: {fileID: 148937625}
-  SkinButton2: {fileID: 240754877}
-  SkinButton3: {fileID: 488486142}
-  SkinButton4: {fileID: 624904526}
-  SkinText: {fileID: 221786970}
-  StartButton: {fileID: 691950125}
-  Title: {fileID: 1556298941}
+  homePanel: {fileID: 1430565351}
+  upgradePanel: {fileID: 808543174}
+  upgradeText: {fileID: 1582573363}
+  upgradeButton1: {fileID: 381617557}
+  upgradeButton2: {fileID: 424705904}
+  upgradeButton3: {fileID: 571858771}
+  upgradeButton4: {fileID: 99947679}
+  skinPanel: {fileID: 425770901}
+  skinButton1: {fileID: 148937625}
+  skinButton2: {fileID: 240754877}
+  skinButton3: {fileID: 488486142}
+  skinButton4: {fileID: 624904526}
+  skinText: {fileID: 221786970}
+  startButton: {fileID: 691950125}
+  title: {fileID: 1556298941}
 --- !u!1 &1366550244
 GameObject:
   m_ObjectHideFlags: 0
@@ -3454,21 +3454,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c53b77652c3f42e49a45faa22d381a51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PanelChange
-  HomePanel: {fileID: 1430565351}
-  UpgradePanel: {fileID: 808543174}
-  UpgradeText: {fileID: 1582573363}
-  UpgradeButton1: {fileID: 381617557}
-  UpgradeButton2: {fileID: 424705904}
-  UpgradeButton3: {fileID: 571858771}
-  UpgradeButton4: {fileID: 99947679}
-  SkinPanel: {fileID: 425770901}
-  SkinButton1: {fileID: 148937625}
-  SkinButton2: {fileID: 240754877}
-  SkinButton3: {fileID: 488486142}
-  SkinButton4: {fileID: 624904526}
-  SkinText: {fileID: 221786970}
-  StartButton: {fileID: 691950125}
-  Title: {fileID: 1556298941}
+  homePanel: {fileID: 1430565351}
+  upgradePanel: {fileID: 808543174}
+  upgradeText: {fileID: 1582573363}
+  upgradeButton1: {fileID: 381617557}
+  upgradeButton2: {fileID: 424705904}
+  upgradeButton3: {fileID: 571858771}
+  upgradeButton4: {fileID: 99947679}
+  skinPanel: {fileID: 425770901}
+  skinButton1: {fileID: 148937625}
+  skinButton2: {fileID: 240754877}
+  skinButton3: {fileID: 488486142}
+  skinButton4: {fileID: 624904526}
+  skinText: {fileID: 221786970}
+  startButton: {fileID: 691950125}
+  title: {fileID: 1556298941}
 --- !u!1 &1556298941
 GameObject:
   m_ObjectHideFlags: 0

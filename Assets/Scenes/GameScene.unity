@@ -368,7 +368,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 300}
+  m_AnchoredPosition: {x: 0, y: 500}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &278700818
@@ -391,7 +391,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: End!
+  m_text: GameOver!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -426,7 +426,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_characterHorizontalScale: 1
@@ -518,8 +518,7 @@ Transform:
   m_LocalPosition: {x: 115.99564, y: 259.5667, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 987827597}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &534251790
@@ -615,7 +614,7 @@ GameObject:
   - component: {fileID: 565372674}
   - component: {fileID: 565372673}
   m_Layer: 5
-  m_Name: Retry
+  m_Name: RetryButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -749,8 +748,8 @@ GameObject:
   - component: {fileID: 574614373}
   - component: {fileID: 574614375}
   m_Layer: 0
-  m_Name: paddle
-  m_TagString: panel
+  m_Name: Paddle
+  m_TagString: paddle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -913,11 +912,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: efbf802a6ef47df4187643864450b670, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::panelmove
+  m_EditorClassIdentifier: Assembly-CSharp::PaddleMove
   speed: 7
   isTouchLeft: 0
   isTouchRight: 0
-  Ball: {fileID: 2129900335}
+  ball: {fileID: 2129900335}
 --- !u!1 &780936879
 GameObject:
   m_ObjectHideFlags: 0
@@ -1063,17 +1062,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2575016875960869037, guid: fecee2c867c074840a1c759de2f00e23, type: 3}
+      propertyPath: ball
+      value: 
+      objectReference: {fileID: 2129900335}
+    - target: {fileID: 2575016875960869037, guid: fecee2c867c074840a1c759de2f00e23, type: 3}
+      propertyPath: speed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3368564237233035841, guid: fecee2c867c074840a1c759de2f00e23, type: 3}
       propertyPath: m_Name
-      value: test
+      value: Test
       objectReference: {fileID: 0}
     - target: {fileID: 7510448005793630707, guid: fecee2c867c074840a1c759de2f00e23, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.32
+      value: 0.96
       objectReference: {fileID: 0}
     - target: {fileID: 7510448005793630707, guid: fecee2c867c074840a1c759de2f00e23, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -9.68
+      value: -7.97
       objectReference: {fileID: 0}
     - target: {fileID: 7510448005793630707, guid: fecee2c867c074840a1c759de2f00e23, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1470,11 +1477,11 @@ Transform:
   m_GameObject: {fileID: 987827594}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -115.99564, y: -259.5667, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 494864736}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &990410222
 GameObject:
@@ -2048,6 +2055,7 @@ MonoBehaviour:
   stageManager: {fileID: 1984313836}
   bossStageData: {fileID: 11400000, guid: 976b48551b3eecb42a07f1703116f1a2, type: 2}
   lockPrefab: {fileID: 7062390436121771302, guid: 979fe96d929481b4b8c92965a8a339ae, type: 3}
+  gameManager: {fileID: 1848853671}
   requiredLockCount: 5
 --- !u!4 &1143149573
 Transform:
@@ -2850,7 +2858,7 @@ GameObject:
   - component: {fileID: 1395055351}
   - component: {fileID: 1395055350}
   m_Layer: 5
-  m_Name: MainMenu
+  m_Name: MainMenuButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3060,7 +3068,7 @@ GameObject:
   - component: {fileID: 1536047581}
   - component: {fileID: 1536047580}
   m_Layer: 0
-  m_Name: boss
+  m_Name: BossManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3077,9 +3085,10 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fac38512d3182bf4bb6da4a9c1a79f60, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::bossmanager
+  m_EditorClassIdentifier: Assembly-CSharp::BossManager
   chapterBosses:
   - {fileID: 1143149572}
+  gameManager: {fileID: 1848853671}
 --- !u!4 &1536047581
 Transform:
   m_ObjectHideFlags: 0
@@ -3109,7 +3118,7 @@ GameObject:
   - component: {fileID: 1556841128}
   - component: {fileID: 1556841127}
   m_Layer: 5
-  m_Name: stop
+  m_Name: StopButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3889,7 +3898,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   ball: {fileID: 2129900330}
-  panel: {fileID: 574614370}
+  paddle: {fileID: 574614370}
   stageManager: {fileID: 1984313836}
   currentStage: 1
   stages:
@@ -3906,6 +3915,7 @@ MonoBehaviour:
   isPaused: 0
   pauseMenu: {fileID: 1971519607}
   resultPanel: {fileID: 534251790}
+  resultTitleText: {fileID: 278700818}
   resultStageText: {fileID: 198214527}
   resultCoinText: {fileID: 1320150536}
   mainMenuSceneName: StartScene
@@ -3922,7 +3932,7 @@ Transform:
   m_GameObject: {fileID: 1848853670}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.41699, y: -0.11162, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4244,7 +4254,7 @@ GameObject:
   - component: {fileID: 1984313837}
   - component: {fileID: 1984313836}
   m_Layer: 0
-  m_Name: stagemanager
+  m_Name: StageManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4261,13 +4271,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0702566f04d00654c83ce0ebdbe0f31e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::stagemanager
+  m_EditorClassIdentifier: Assembly-CSharp::StageManager
+  obstacleBricks: []
   gameManager: {fileID: 1848853671}
-  Ball: {fileID: 2129900335}
-  Panel: {fileID: 574614375}
+  ball: {fileID: 2129900335}
+  paddle: {fileID: 574614375}
   transitionTime: 2
   playPosition: {x: 0, y: 0, z: 0}
-  waitPosition: {x: 0, y: 4, z: 0}
 --- !u!4 &1984313837
 Transform:
   m_ObjectHideFlags: 0
@@ -4277,7 +4287,7 @@ Transform:
   m_GameObject: {fileID: 1984313835}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.33249, y: 0.11361, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4298,7 +4308,7 @@ GameObject:
   - component: {fileID: 2129900335}
   - component: {fileID: 2129900336}
   m_Layer: 0
-  m_Name: ball
+  m_Name: Ball
   m_TagString: ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4454,13 +4464,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6e147a6eeb830e04b829f8bc9cc63129, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ball
+  m_EditorClassIdentifier: Assembly-CSharp::Ball
   isTouchDown: 0
   power: 10
   growSpeed: 10
   isLaunched: 0
   isTransitioning: 0
-  panel: {fileID: 574614372}
+  paddle: {fileID: 574614372}
   offsetY: 0.5
   aimLine: {fileID: 2129900336}
   arrowLeft: {fileID: 1955894329}
@@ -4469,7 +4479,6 @@ MonoBehaviour:
   arrowHeadLength: 0.4
   arrowHeadAngle: 30
   launchSpeed: 10
-  attackPower: 10
   absorptionRate: 0.1
 --- !u!120 &2129900336
 LineRenderer:
@@ -4662,3 +4671,4 @@ SceneRoots:
   - {fileID: 810532057}
   - {fileID: 5820607827414296039}
   - {fileID: 494864736}
+  - {fileID: 987827597}
