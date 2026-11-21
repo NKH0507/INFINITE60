@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: StageData_2
   m_EditorClassIdentifier: Assembly-CSharp::stage
   stageNumber: 2
-  stagePrefab: {fileID: 3086423322787056, guid: 9ea4f20db0085ce438520112c45a65ff, type: 3}
+  stagePrefab: {fileID: 7489307605012159776, guid: 469c8751f1c5f0c4895d016dc5d7e464, type: 3}

@@ -8,9 +8,6 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    // 메인 카메라
-    public Camera mainCamera;
-
     // 공
     public GameObject ball;
 
@@ -28,9 +25,6 @@ public class GameManager : MonoBehaviour
 
     // 70% 이상 깨졌는지 확인
     bool isChangingStage = false;
-
-    // 처음 카메라 크기
-    float startCameraSize;
 
     // 현재 스테이지의 처음 벽돌 개수
     int startBrickCount;
@@ -59,14 +53,47 @@ public class GameManager : MonoBehaviour
     // 코인 매니저
     public CoinManager coinManager;
 
+    public float firstStagePower = 10f;   // 1스테이지 시작 공격력
+    public float absorbRate = 0.1f;       // 흡수율 (최대 HP의 10%)   
+    public float zoomRate = 0.8f;         // 80%
+    // 줌아웃 기준 계산용 흡수율. 강화와 상관없이 항상 10%
+    const float BaseAbsorbRate = 0.1f;
+    // zoomPowers[0] = 시작 공격력, zoomPowers[n] = n스테이지 줌아웃 기준
+    float[] zoomPowers;
+
+    void Awake()
+    {
+        zoomPowers = new float[stages.Length + 1];
+        zoomPowers[0] = firstStagePower;
+
+        float totalHp = 0f;
+        for (int i = 0; i < stages.Length; i++)
+        {
+            // 스테이지 프리팹 안 벽돌의 HP를 읽어서 누적
+            foreach (Brick b in stages[i].stagePrefab.GetComponentsInChildren<Brick>(true))
+                totalHp += b.hp;
+
+            zoomPowers[i + 1] = zoomRate * (firstStagePower + BaseAbsorbRate * totalHp);
+        }
+    }
+
+    // 이번 스테이지가 시작된 기준과 줌아웃 기준
+    public float StageStartPower => zoomPowers[Mathf.Clamp(currentStage - 1, 0, stages.Length)];
+    public float StageZoomPower => zoomPowers[Mathf.Clamp(currentStage, 0, stages.Length)];
+
+    // 벽돌을 흡수할 때마다 호출. 기준을 넘으면 줌아웃
+    public void CheckZoom()
+    {
+        if (isChangingStage) return;
+        if (currentStage >= stages.Length) return;   // 마지막 스테이지 이후에는 줌아웃하지 않음
+        if (ball.GetComponent<ball>().power >= StageZoomPower)
+            StartStageChange();
+    }
     void Start()
     {
         Time.timeScale = 1f;
         pauseMenu.SetActive(false);
         resultPanel.SetActive(false);
-
-        // 게임 시작할 때 카메라 크기 저장
-        startCameraSize = mainCamera.orthographicSize;
 
         // 첫 번째 스테이지 생성
         stageManager.CreateStage(stages[currentStage - 1]);
@@ -96,22 +123,7 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-
-        // 현재 남아있는 벽돌 개수
-        int remainBrick = stageManager.GetBrickCount();
-
-        // 깨진 벽돌 개수
-        int destroyedBrick = startBrickCount - remainBrick;
-
-        // 깨진 비율
-        float destroyPercent =
-            (float)destroyedBrick / startBrickCount;
-
-        // 70% 이상 깨졌으면 다음 스테이지로 이동
-        if (destroyPercent >= 0.7f)
-        {
-            StartStageChange();
-        }
+        //크기증가
     }
 
     public void BallFell()
@@ -155,7 +167,7 @@ public class GameManager : MonoBehaviour
     void ChangeStageFinished()
     {
         // 보스 스테이지
-        if (currentStage % 2 == 0)
+        if (false && currentStage % 2 == 0)   // 보스 끔 (새 규칙과 맞지 않아 보류)
         {
             int chapter = currentStage / 2;
             bossManager.StartBoss(chapter);

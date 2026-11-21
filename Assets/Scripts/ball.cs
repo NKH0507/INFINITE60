@@ -7,7 +7,10 @@ public class ball : MonoBehaviour
 {
     public bool isTouchDown;
 
-    public int power;
+    public float power;
+    Vector3 baseScale;
+    Vector3 targetScale;
+    public float growSpeed = 10f;
 
     public bool isLaunched = false;
     Vector2 startMousePos;
@@ -60,6 +63,9 @@ public class ball : MonoBehaviour
         arrowRight.enabled = false;
 
         currentSpeed = launchSpeed;
+        baseScale = transform.localScale;
+        power = gameManager.firstStagePower;
+        RefreshSize(true);
     }
 
     void Update()
@@ -143,18 +149,18 @@ public class ball : MonoBehaviour
         aimLine.SetPosition(1, endPosition);
 
         // 화살촉 방향 계산
-        Vector2 leftDirection =  Quaternion.Euler(0f, 0f, 180f - arrowHeadAngle) * direction;
+        Vector2 leftDirection = Quaternion.Euler(0f, 0f, 180f - arrowHeadAngle) * direction;
         Vector2 rightDirection = Quaternion.Euler(0f, 0f, 180f + arrowHeadAngle) * direction;
 
         // 왼쪽 화살촉
         arrowLeft.positionCount = 2;
         arrowLeft.SetPosition(0, endPosition);
-        arrowLeft.SetPosition(1,endPosition + (Vector3)(leftDirection * arrowHeadLength));
+        arrowLeft.SetPosition(1, endPosition + (Vector3)(leftDirection * arrowHeadLength));
 
         // 오른쪽 화살촉
         arrowRight.positionCount = 2;
         arrowRight.SetPosition(0, endPosition);
-        arrowRight.SetPosition(1,endPosition + (Vector3)(rightDirection * arrowHeadLength));
+        arrowRight.SetPosition(1, endPosition + (Vector3)(rightDirection * arrowHeadLength));
     }
 
     void Launch()
@@ -261,17 +267,11 @@ public class ball : MonoBehaviour
         isLaunched = false;
     }
 
-    //공 크기 감소
-    public void ReduceSize()
-    {
-        transform.localScale *= 0.7f;
-    }
-
-    // 공 속도를 70%로 줄인다.
-    public void ReduceSpeed()
-    {
-        currentSpeed *= 0.7f;
-    }
+    //// 공 속도를 70%로 줄인다.
+    //public void ReduceSpeed()
+    //{
+    //    currentSpeed *= 0.7f;
+    //}
 
     //공 상태 초기화
     public void ResetBall()
@@ -299,7 +299,7 @@ public class ball : MonoBehaviour
         rigid.angularVelocity = 0f;
 
         // 패널 가운데 위로 이동
-        transform.position = new Vector3(panel.position.x,panel.position.y + offsetY,transform.position.z);
+        transform.position = new Vector3(panel.position.x, panel.position.y + offsetY, transform.position.z);
     }
 
     // 플래그 지우기
@@ -316,4 +316,37 @@ public class ball : MonoBehaviour
 
     }
 
+    public void AddPower(float amount)
+    {
+        power += amount;
+        RefreshSize(false);
+    }
+
+    public Vector3 SizeForCurrentStage()
+    {
+        float start = gameManager.StageStartPower;
+        float zoom = gameManager.StageZoomPower;
+
+        // 기준이 잘못 잡혀 0으로 나누는 일 방지
+        if (zoom <= start) return baseScale;
+
+        float progress = (power - start) / (zoom - start);   // 0이면 시작, 1이면 줌아웃
+        return baseScale * Mathf.Clamp(1f + progress, 0.5f, 2.5f);
+    }
+
+    public void RefreshSize(bool instant)
+    {
+        targetScale = SizeForCurrentStage();
+        if (instant) transform.localScale = targetScale;
+    }
+
+    void LateUpdate()
+    {
+        if (isTransitioning) return;
+        if (transform.localScale == targetScale) return;
+
+        transform.localScale = Vector3.Lerp(transform.localScale, targetScale, growSpeed * Time.deltaTime);
+        if ((transform.localScale - targetScale).sqrMagnitude < 0.00001f)
+            transform.localScale = targetScale;
+    }
 }

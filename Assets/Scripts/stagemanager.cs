@@ -155,7 +155,7 @@ public class stagemanager : MonoBehaviour
 
         // 7. 공의 시작 크기와 최종 크기
         Vector3 ballStartScale = Ball.transform.localScale;
-        Vector3 ballTargetScale = ballStartScale * 0.7f;
+        Vector3 ballTargetScale = Ball.SizeForCurrentStage();
 
         // 8. 공 + 벽돌 동시에 이동
         float time = 0f;
@@ -186,10 +186,10 @@ public class stagemanager : MonoBehaviour
         Ball.transform.localScale =  ballTargetScale;
         currentStage.transform.position = playPosition;
 
-        // 9. 연출이 끝난 후 공 크기와 속도 감소 및 패널 활성화
-        //Ball.ReduceSize();
-        Ball.ReduceSpeed();
+        // 9. 연출이 끝난 후 공 크기 감소 및 패널 활성화
         Ball.RestoreBallState();
+        Ball.isTransitioning = false;   // 크기 자동 계산 다시 켜기
+        Ball.RefreshSize(true);         // 새 스테이지 기준 크기로 맞춤
         Panel.enabled = true;
 
         // 10. 시간증가 및 다시 시작
