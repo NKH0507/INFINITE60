@@ -39,7 +39,7 @@ public class Brick : MonoBehaviour
 
         if (ballScript != null)
         {
-            damage = Mathf.Max(1, Mathf.FloorToInt(ballScript.attackPower));
+            damage = Mathf.Max(1, Mathf.FloorToInt(ballScript.power));
         }
 
         // 공격력만큼 벽돌 체력 감소
@@ -69,12 +69,6 @@ public class Brick : MonoBehaviour
             if (!isObstacle && gamemanager != null)
             {
                 gamemanager.OnBrickDestroyed(this);
-            }
-
-            // 벽돌 파괴 시 공이 체력 흡수
-            if (ballScript != null)
-            {
-                ballScript.Absorb(maxHp);
             }
 
             // 벽돌 삭제

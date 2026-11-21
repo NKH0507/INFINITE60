@@ -50,12 +50,6 @@ public class ball : MonoBehaviour
     public float launchSpeed = 10f;
     float currentSpeed;
 
-    // 현재 공의 공격력
-    public float attackPower = 1f;
-
-    // 벽돌 파괴 시 흡수하는 비율 (10%)
-    public float absorptionRate = 0.1f;
-
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -322,23 +316,6 @@ public class ball : MonoBehaviour
 
     }
 
-    // 벽돌 파괴 시 공격력과 크기 증가
-    public void Absorb(int maxHp)
-    {
-        // 벽돌 최대 체력의 10% 계산
-        float absorb = maxHp * absorptionRate;
-
-        // 증가하기 전 공격력
-        float oldPower = attackPower;
-
-        // 현재 공격력 증가
-        attackPower += absorb;
-
-        // 공격력이 증가한 비율만큼 공 크기도 증가
-        float sizeRate = attackPower / oldPower;
-
-        transform.localScale *= sizeRate;
-    }
     public void AddPower(float amount)
     {
         power += amount;

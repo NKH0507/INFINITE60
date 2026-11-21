@@ -85,6 +85,7 @@ public class GameManager : MonoBehaviour
     public void CheckZoom()
     {
         if (isChangingStage) return;
+        if (currentStage >= stages.Length) return;   // 마지막 스테이지 이후에는 줌아웃하지 않음
         if (ball.GetComponent<ball>().power >= StageZoomPower)
             StartStageChange();
     }
@@ -166,7 +167,7 @@ public class GameManager : MonoBehaviour
     void ChangeStageFinished()
     {
         // 보스 스테이지
-        if (currentStage % 2 == 0)
+        if (false && currentStage % 2 == 0)   // 보스 끔 (새 규칙과 맞지 않아 보류)
         {
             int chapter = currentStage / 2;
             bossManager.StartBoss(chapter);
