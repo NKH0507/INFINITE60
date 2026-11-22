@@ -7,7 +7,7 @@ public class Ball : MonoBehaviour
 {
     public bool isTouchDown;
     //공의 공격력
-    public float power;
+    public float power = 0f;
     Vector3 baseScale;
     Vector3 targetScale;
     public float growSpeed = 10f;

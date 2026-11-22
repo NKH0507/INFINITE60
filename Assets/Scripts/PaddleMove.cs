@@ -13,7 +13,12 @@ public class PaddleMove : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        int paddleLevel = StatUpgradeButton.GetLevel(
+            StatUpgradeButton.StatType.PaddleSize);
 
+        Vector3 scale = transform.localScale;
+        scale.x = PlayerStats.GetPaddleScaleX(paddleLevel);
+        transform.localScale = scale;
     }
 
     // Update is called once per frame
