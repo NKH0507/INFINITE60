@@ -102,11 +102,34 @@ public class Ball : MonoBehaviour
         glow.transform.SetParent(transform, false);
         glow.transform.localScale = new Vector3(1.6f, 1.6f, 1f);
         flashRenderer = glow.AddComponent<SpriteRenderer>();
-        flashRenderer.sprite = ballRenderer.sprite;
+        flashRenderer.sprite = CreateGlowSprite();
         flashRenderer.sharedMaterial = ballRenderer.sharedMaterial;
         flashRenderer.sortingLayerID = ballRenderer.sortingLayerID;
         flashRenderer.sortingOrder = ballRenderer.sortingOrder - 1;
         flashRenderer.color = new Color(flashColor.r, flashColor.g, flashColor.b, 0f);
+    }
+
+    // 가운데가 밝고 가장자리로 갈수록 투명해지는 동그란 빛 (공 크기 = 1)
+    static Sprite glowSprite;
+    static Sprite CreateGlowSprite()
+    {
+        if (glowSprite != null) return glowSprite;
+        const int n = 32;
+        Texture2D tex = new Texture2D(n, n, TextureFormat.RGBA32, false);
+        tex.wrapMode = TextureWrapMode.Clamp;
+        for (int y = 0; y < n; y++)
+        {
+            for (int x = 0; x < n; x++)
+            {
+                float dx = (x + 0.5f) / n - 0.5f, dy = (y + 0.5f) / n - 0.5f;
+                float d = Mathf.Sqrt(dx * dx + dy * dy) / 0.5f; // 0 = 가운데, 1 = 가장자리
+                float a = Mathf.Clamp01(1f - d);
+                tex.SetPixel(x, y, new Color(1f, 1f, 1f, a * a));
+            }
+        }
+        tex.Apply();
+        glowSprite = Sprite.Create(tex, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f), n);
+        return glowSprite;
     }
 
     // 벽돌이 깨져서 흡수 조각이 날아오기 시작할 때 호출된다.
