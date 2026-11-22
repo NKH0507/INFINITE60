@@ -3910,6 +3910,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d4c7f5e916b85fb44ba3bcb696afba54, type: 2}
   - {fileID: 11400000, guid: 6e1b0a2118b5a89418f894d2f6a99ec7, type: 2}
   - {fileID: 11400000, guid: 976b48551b3eecb42a07f1703116f1a2, type: 2}
+  - {fileID: 11400000, guid: 863562a5bd5049d5b937abbaba0235aa, type: 2}
   timeManager: {fileID: 494864735}
   bossManager: {fileID: 1536047580}
   isPaused: 0

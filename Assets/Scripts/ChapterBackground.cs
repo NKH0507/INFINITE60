@@ -6,7 +6,7 @@ using UnityEngine;
 //
 // [챕터 안에서]
 //   줌아웃 한 번에 2배씩 멀어지고, 챕터 마지막 스테이지에서 배경 전체가 보인다.
-//   예) 1~3스테이지: 4배 → 2배 → 1배 / 7~8스테이지: 2배 → 1배
+//   예) 1~3, 4~6, 7~9스테이지 모두 4배 → 2배 → 1배
 //   확대 기준점은 StageManager의 축소 기준점(패들 윗면, 화면 가운데)이다.
 //   각 챕터 그림에서 이 기준점에 놓일 지점을 Anchor(0~1 비율)로 정한다.
 //
@@ -20,11 +20,8 @@ public class ChapterBackground : MonoBehaviour
     // 0: 1챕터(방), 1: 2챕터(도시), 2: 3챕터(우주)
     [SerializeField] private Sprite[] chapterSprites;
 
-    // 각 챕터가 시작되는 스테이지 번호 (1~3, 4~6, 7~8)
+    // 각 챕터가 시작되는 스테이지 번호 (1~3, 4~6, 7~9)
     [SerializeField] private int[] chapterStartStages = { 1, 4, 7 };
-
-    // 마지막 스테이지 번호
-    [SerializeField] private int finalStage = 8;
 
     // 챕터 그림에서 확대 기준점에 놓일 지점 (왼쪽 아래 0,0 ~ 오른쪽 위 1,1)
     [SerializeField] private Vector2[] chapterAnchors =
@@ -48,13 +45,13 @@ public class ChapterBackground : MonoBehaviour
     // 구름으로 넘어가는 챕터 (도시 → 우주). 구름이 양옆에서 덮었다가 갈라지며 다음 배경이 나온다.
     [SerializeField] private bool[] cloudTransitionInto = { false, false, true };
 
-    // 구름 그림 (왼쪽 구름 기준, 오른쪽은 좌우 반전). 비워두면 코드로 만든 임시 구름을 쓴다.
+    // 구름 한 덩어리 그림. 비워두면 코드로 만든 임시 구름을 쓴다.
     [SerializeField] private Sprite cloudSprite;
 
     // 줌아웃 한 번의 배율 (StageManager의 StageShrinkRatio 0.5와 짝)
     private const float ZoomStep = 2f;
 
-    enum PrevMode { None, Fade, Portal }
+    enum PrevMode { None, Fade, Portal, Slide }
 
     private SpriteRenderer mainRenderer;  // 현재 챕터 배경
     private SpriteRenderer prevRenderer;  // 이전 챕터 배경
@@ -81,10 +78,10 @@ public class ChapterBackground : MonoBehaviour
     private int backdropChapter = -1;
 
     // 구름 전환
-    private SpriteRenderer cloudLeft;
-    private SpriteRenderer cloudRight;
-    private float cloudClose;   // 0 = 화면 밖, 1 = 가운데에서 만남
+    private SpriteRenderer[] clouds = new SpriteRenderer[4];
     private float cloudAlpha;
+    private float prevOffsetY;   // 이전 배경이 아래로 내려간 거리
+    private float mainOffsetY;   // 다음 배경이 위에서 내려오는 거리
 
     void Awake()
     {
@@ -118,8 +115,10 @@ public class ChapterBackground : MonoBehaviour
 
         // 구름: 배경보다 앞, 벽돌과 공보다 뒤
         Sprite cloud = cloudSprite != null ? cloudSprite : CreateCloudSprite();
-        cloudLeft = CreateCloud("Background_CloudLeft", cloud, false);
-        cloudRight = CreateCloud("Background_CloudRight", cloud, true);
+        for (int i = 0; i < clouds.Length; i++)
+        {
+            clouds[i] = CreateCloud("Background_Cloud" + i, cloud, i % 2 == 1);
+        }
     }
 
     SpriteRenderer CreateCloud(string objectName, Sprite sprite, bool flip)
@@ -154,13 +153,17 @@ public class ChapterBackground : MonoBehaviour
             return;
         }
 
-        Apply(mainRenderer, mainChapter, mainZoom);
+        Apply(mainRenderer, mainChapter, mainZoom, mainOffsetY);
         UpdateBackdrop();
         LayoutClouds();
 
         if (prevMode == PrevMode.Fade)
         {
             Apply(prevRenderer, prevChapter, prevZoom);
+        }
+        else if (prevMode == PrevMode.Slide)
+        {
+            Apply(prevRenderer, prevChapter, prevZoom, prevOffsetY);
         }
         else if (prevMode == PrevMode.Portal)
         {
@@ -282,8 +285,11 @@ public class ChapterBackground : MonoBehaviour
     // 중간에 끊긴 전환의 남은 상태를 정리한다.
     void FinishPrevious()
     {
-        if (prevMode == PrevMode.Fade)
+        if (prevMode == PrevMode.Fade || prevMode == PrevMode.Slide)
         {
+            mainOffsetY = 0f;
+            prevOffsetY = 0f;
+            foreach (SpriteRenderer c in clouds) c.enabled = false;
             ClearPrevious();
         }
         else if (prevMode == PrevMode.Portal)
@@ -300,55 +306,58 @@ public class ChapterBackground : MonoBehaviour
         portalMask.enabled = false;
     }
 
-    // ---------- 구름 전환 ----------
-
-    // 전반부: 이전 배경이 계속 줌아웃되고 구름이 양옆에서 닫힌다.
-    // 가운데: 구름 뒤에서 다음 챕터 배경으로 바꾼다.
-    // 후반부: 구름이 갈라지며 흐려지고, 다음 배경이 줌아웃되며 나온다.
+    // ---------- 구름 전환 (도시 → 우주) ----------
+    // 이전 배경(도시)이 구름과 함께 아래로 쓸려 내려가며 작아지고,
+    // 그 뒤에서 다음 배경(우주)이 위에서 내려오며 자리를 잡는다.
+    // 구름은 작아진 도시 그림의 네 모서리만 살짝 가려서 그림 테두리가 티 나지 않게 한다.
     IEnumerator CloudRoutine(int nextChapter, float endZoom, float duration)
     {
-        float oldStart = mainZoom;
-        float oldEnd = mainZoom * 0.8f;          // 살짝 더 멀어진다. 빈 곳은 그라데이션이 채운다.
-        float newStart = endZoom * 1.6f;
-        bool swapped = false;
-        cloudLeft.enabled = cloudRight.enabled = true;
+        // 이전 배경을 앞쪽 렌더러로 옮긴다.
+        prevChapter = mainChapter;
+        prevRenderer.sprite = mainRenderer.sprite;
+        prevRenderer.maskInteraction = SpriteMaskInteraction.None;
+        prevRenderer.enabled = true;
+        prevMode = PrevMode.Slide;
+        prevZoom = mainZoom;
+        prevAlpha = 1f;
+
+        // 다음 배경은 뒤에서 확대된 채 위쪽에 있다가 내려온다.
+        mainChapter = nextChapter;
+        mainRenderer.sprite = GetSprite(nextChapter);
+
+        float prevStartZoom = mainZoom;
+        float prevEndZoom = mainZoom * 0.3f;
+        float newStartZoom = endZoom * 1.6f;
+        float screenHeight = targetCamera.orthographicSize * 2f;
+
+        foreach (SpriteRenderer c in clouds) c.enabled = true;
 
         float time = 0f;
         while (true)
         {
             time += Time.deltaTime;
             float t = duration > 0f ? Mathf.Clamp01(time / duration) : 1f;
+            float easeIn = t * t;                        // 점점 빨라지며 내려감
+            float easeOut = 1f - (1f - t) * (1f - t);    // 빠르게 왔다가 천천히 자리 잡음
 
-            if (t < 0.5f)
-            {
-                float a = t / 0.5f;
-                mainZoom = Mathf.Lerp(oldStart, oldEnd, a);
-                float c = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.3f, 1f, a));
-                cloudClose = c;
-                cloudAlpha = c;
-            }
-            else
-            {
-                if (!swapped)
-                {
-                    swapped = true;
-                    mainChapter = nextChapter;
-                    mainRenderer.sprite = GetSprite(nextChapter);
-                }
-                float b = (t - 0.5f) / 0.5f;
-                mainZoom = Mathf.Lerp(newStart, endZoom, b);
-                cloudClose = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0f, 0.7f, b));
-                cloudAlpha = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.2f, 1f, b));
-            }
+            prevZoom = Mathf.Exp(Mathf.Lerp(Mathf.Log(prevStartZoom), Mathf.Log(prevEndZoom), easeOut));
+            prevOffsetY = -screenHeight * 0.9f * easeIn;
+            prevAlpha = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.6f, 1f, t));
+            cloudAlpha = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0f, 0.2f, t)) * prevAlpha;
+
+            mainZoom = Mathf.Lerp(newStartZoom, endZoom, easeOut);
+            mainOffsetY = screenHeight * 0.5f * (1f - easeOut);
 
             if (t >= 1f) break;
             yield return null;
         }
 
         mainZoom = endZoom;
-        cloudClose = 0f;
+        mainOffsetY = 0f;
+        prevOffsetY = 0f;
         cloudAlpha = 0f;
-        cloudLeft.enabled = cloudRight.enabled = false;
+        foreach (SpriteRenderer c in clouds) c.enabled = false;
+        ClearPrevious();
     }
 
     bool UsesClouds(int chapter)
@@ -356,68 +365,61 @@ public class ChapterBackground : MonoBehaviour
         return cloudTransitionInto != null && chapter < cloudTransitionInto.Length && cloudTransitionInto[chapter];
     }
 
+    // 작아지는 이전 배경의 네 모서리에 구름을 붙인다.
     void LayoutClouds()
     {
-        if (!cloudLeft.enabled) return;
+        if (!clouds[0].enabled) return;
 
-        Rect screen = ScreenRect();
-        Vector2 size = cloudLeft.sprite.bounds.size;
-        float width = screen.width * 0.9f;
-        float height = screen.height * 1.2f;
-        Vector3 scale = new Vector3(width / size.x, height / size.y, 1f);
-
-        // 닫혔을 때 구름의 꽉 찬 부분(가로 65%)이 화면 가운데를 조금 넘는다.
-        float closedCenter = screen.center.x + screen.width * 0.05f - width * (0.65f - 0.5f);
-        float openCenter = screen.xMin - width * 0.5f;
-        float leftX = Mathf.Lerp(openCenter, closedCenter, cloudClose);
-        float rightX = screen.center.x * 2f - leftX;
+        GetLayout(prevChapter, prevZoom, out _, out Vector2 bottomLeft, out Vector2 worldSize);
+        bottomLeft.y += prevOffsetY;
+        Vector2 cloudSize = clouds[0].sprite.bounds.size;
+        float width = worldSize.x * 0.45f;
+        float scale = width / cloudSize.x;
         float z = transform.position.z;
 
-        cloudLeft.transform.localScale = scale;
-        cloudRight.transform.localScale = scale;
-        cloudLeft.transform.position = new Vector3(leftX, screen.center.y, z);
-        cloudRight.transform.position = new Vector3(rightX, screen.center.y, z);
-        Color c = new Color(1f, 1f, 1f, cloudAlpha);
-        cloudLeft.color = c;
-        cloudRight.color = c;
+        Vector2[] corners =
+        {
+            new Vector2(bottomLeft.x, bottomLeft.y + worldSize.y),                 // 왼쪽 위
+            new Vector2(bottomLeft.x + worldSize.x, bottomLeft.y + worldSize.y),   // 오른쪽 위
+            new Vector2(bottomLeft.x, bottomLeft.y),                               // 왼쪽 아래
+            new Vector2(bottomLeft.x + worldSize.x, bottomLeft.y),                 // 오른쪽 아래
+        };
+
+        for (int i = 0; i < clouds.Length; i++)
+        {
+            clouds[i].transform.localScale = new Vector3(scale, scale, 1f);
+            clouds[i].transform.position = new Vector3(corners[i].x, corners[i].y, z);
+            clouds[i].color = new Color(1f, 1f, 1f, cloudAlpha);
+        }
     }
 
-    // 왼쪽에서 들어오는 도트 구름 (오른쪽 가장자리가 몽글몽글)
+    // 몽글몽글한 도트 구름 한 덩어리 (가로로 긴 모양)
     static Sprite CreateCloudSprite()
     {
-        const int w = 48, h = 96;
-        const int baseEdge = 31; // 이 x까지는 꽉 찬 구름
+        const int w = 40, h = 22;
         Texture2D tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
         tex.filterMode = FilterMode.Point;
         tex.wrapMode = TextureWrapMode.Clamp;
 
-        System.Random rng = new System.Random(7);
-        List<Vector3> bumps = new List<Vector3>(); // x, y, 반지름
-        for (int y = -4; y < h + 8; y += 9)
+        // 원 여러 개를 겹쳐 구름 모양을 만든다. (x, y, 반지름)
+        Vector3[] puffs =
         {
-            bumps.Add(new Vector3(baseEdge + rng.Next(-3, 4), y + rng.Next(-2, 3), rng.Next(7, 13)));
-        }
-
-        Color white = new Color(1f, 1f, 1f, 1f);
+            new Vector3(10, 8, 7), new Vector3(19, 12, 9), new Vector3(29, 9, 8), new Vector3(20, 6, 6), new Vector3(33, 6, 5),
+        };
+        Color white = Color.white;
         Color shade = new Color(0.86f, 0.9f, 0.97f, 1f);
         for (int y = 0; y < h; y++)
         {
             for (int x = 0; x < w; x++)
             {
-                bool inside = x < baseEdge;
-                bool shaded = false;
-                foreach (Vector3 b in bumps)
+                bool inside = false;
+                foreach (Vector3 p in puffs)
                 {
-                    float dx = x - b.x, dy = y - b.y;
-                    float d2 = dx * dx + dy * dy;
-                    if (d2 <= b.z * b.z)
-                    {
-                        inside = true;
-                        // 몽글한 부분의 아래쪽 테두리는 살짝 푸르게
-                        if (dy < 0 && d2 > (b.z - 2.5f) * (b.z - 2.5f)) shaded = true;
-                    }
+                    float dx = x - p.x, dy = y - p.y;
+                    if (dx * dx + dy * dy <= p.z * p.z) inside = true;
                 }
-                tex.SetPixel(x, y, inside ? (shaded ? shade : white) : Color.clear);
+                // 아래쪽 몇 줄은 살짝 푸른 그림자
+                tex.SetPixel(x, y, inside ? (y < 4 ? shade : white) : Color.clear);
             }
         }
         tex.Apply();
@@ -481,7 +483,7 @@ public class ChapterBackground : MonoBehaviour
         int chapter = GetChapter(stage);
         int chapterEnd = chapter + 1 < chapterStartStages.Length
             ? chapterStartStages[chapter + 1] - 1
-            : finalStage;
+            : GameManager.FinalStage;
         int stepsLeft = Mathf.Max(0, chapterEnd - stage);
         return Mathf.Pow(ZoomStep, stepsLeft);
     }
@@ -564,10 +566,10 @@ public class ChapterBackground : MonoBehaviour
         bottomLeft = ScreenPivot() - new Vector2(anchor.x * worldSize.x, anchor.y * worldSize.y);
     }
 
-    void Apply(SpriteRenderer target, int chapter, float zoom)
+    void Apply(SpriteRenderer target, int chapter, float zoom, float offsetY = 0f)
     {
         GetLayout(chapter, zoom, out float scale, out Vector2 bottomLeft, out Vector2 worldSize);
-        SetTransform(target.transform, bottomLeft + worldSize / 2f, scale);
+        SetTransform(target.transform, bottomLeft + worldSize / 2f + new Vector2(0f, offsetY), scale);
     }
 
     void SetTransform(Transform target, Vector2 center, float scale)
