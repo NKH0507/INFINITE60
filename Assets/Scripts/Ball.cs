@@ -12,6 +12,22 @@ public class Ball : MonoBehaviour
     Vector3 targetScale;
     public float growSpeed = 10f;
 
+    // 화면에 보이는 크기의 기준 공격력.
+    // 실제 공격력(power)은 벽돌을 깨는 순간 바로 오르고,
+    // 보이는 크기는 흡수 조각이 공에 닿을 때마다 조금씩 따라 오른다.
+    float shownPower;
+    float lastAbsorbQueuedTime;
+    const float ShowCatchUpDelay = 1.5f; // 조각이 사라져도 이 시간이 지나면 크기를 맞춘다.
+
+    // 조각을 먹을 때 공이 통통 커지는 정도와 반짝임
+    [SerializeField] float absorbPulse = 0.12f;
+    [SerializeField] float pulseDecay = 10f;
+    [SerializeField] Color flashColor = new Color(1f, 0.95f, 0.7f, 0.8f);
+    float pulse;
+    float flash;
+    Vector3 smoothScale;
+    SpriteRenderer flashRenderer;
+
     public bool isLaunched = false;
     Vector2 startMousePos;
     Vector3 startBallPos;
@@ -73,6 +89,62 @@ public class Ball : MonoBehaviour
         // Inspector의 Power를 시작 공격력으로 사용한다. 0 이하이면 기본 공격력을 사용한다.
         power = gameManager.ClampAttackPower(power > 0f ? power : gameManager.firstStagePower);
         RefreshSize(true);
+        CreateFlash();
+    }
+
+    // 공 뒤에서 반짝이는 빛무리 (공과 같은 모양을 조금 크게)
+    void CreateFlash()
+    {
+        SpriteRenderer ballRenderer = GetComponent<SpriteRenderer>();
+        if (ballRenderer == null) return;
+
+        GameObject glow = new GameObject("AbsorbFlash");
+        glow.transform.SetParent(transform, false);
+        glow.transform.localScale = new Vector3(1.6f, 1.6f, 1f);
+        flashRenderer = glow.AddComponent<SpriteRenderer>();
+        flashRenderer.sprite = CreateGlowSprite();
+        flashRenderer.sharedMaterial = ballRenderer.sharedMaterial;
+        flashRenderer.sortingLayerID = ballRenderer.sortingLayerID;
+        flashRenderer.sortingOrder = ballRenderer.sortingOrder - 1;
+        flashRenderer.color = new Color(flashColor.r, flashColor.g, flashColor.b, 0f);
+    }
+
+    // 가운데가 밝고 가장자리로 갈수록 투명해지는 동그란 빛 (공 크기 = 1)
+    static Sprite glowSprite;
+    static Sprite CreateGlowSprite()
+    {
+        if (glowSprite != null) return glowSprite;
+        const int n = 32;
+        Texture2D tex = new Texture2D(n, n, TextureFormat.RGBA32, false);
+        tex.wrapMode = TextureWrapMode.Clamp;
+        for (int y = 0; y < n; y++)
+        {
+            for (int x = 0; x < n; x++)
+            {
+                float dx = (x + 0.5f) / n - 0.5f, dy = (y + 0.5f) / n - 0.5f;
+                float d = Mathf.Sqrt(dx * dx + dy * dy) / 0.5f; // 0 = 가운데, 1 = 가장자리
+                float a = Mathf.Clamp01(1f - d);
+                tex.SetPixel(x, y, new Color(1f, 1f, 1f, a * a));
+            }
+        }
+        tex.Apply();
+        glowSprite = Sprite.Create(tex, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f), n);
+        return glowSprite;
+    }
+
+    // 벽돌이 깨져서 흡수 조각이 날아오기 시작할 때 호출된다.
+    public void NotifyAbsorbQueued()
+    {
+        lastAbsorbQueuedTime = Time.time;
+    }
+
+    // 흡수 조각 하나가 공에 닿았을 때 호출된다. amount만큼 보이는 크기가 커진다.
+    public void OnFragmentAbsorbed(float amount, bool withEffect)
+    {
+        shownPower = Mathf.Min(power, shownPower + amount);
+        if (!withEffect) return;
+        pulse = Mathf.Max(pulse, absorbPulse);
+        flash = 1f;
     }
 
     void Update()
@@ -408,7 +480,7 @@ public class Ball : MonoBehaviour
 
     public Vector3 SizeForCurrentStage()
     {
-        float powerScale = gameManager.GetPowerSizeMultiplier(power);
+        float powerScale = gameManager.GetPowerSizeMultiplier(shownPower);
         float stageScale = Mathf.Pow(0.5f, gameManager.currentStage - 1);
         // 단계별 크기 제한은 없다. Z는 유지하고 화면의 가로/세로만 축소한다.
         float sizeMultiplier = powerScale * stageScale;
@@ -417,20 +489,49 @@ public class Ball : MonoBehaviour
 
     public void RefreshSize(bool instant)
     {
+        if (instant) shownPower = power;
         targetScale = SizeForCurrentStage();
-        if (instant) transform.localScale = targetScale;
+        if (instant)
+        {
+            smoothScale = targetScale;
+            transform.localScale = targetScale;
+        }
     }
 
     void LateUpdate()
     {
         // 실행 중 Inspector에서 공격력을 직접 변경한 경우에도 상한과 목표 크기를 갱신한다.
         power = gameManager.ClampAttackPower(power);
-        RefreshSize(false);
-        if (isTransitioning) return;
-        if (transform.localScale == targetScale) return;
 
-        transform.localScale = Vector3.Lerp(transform.localScale, targetScale, growSpeed * Time.deltaTime);
-        if ((transform.localScale - targetScale).sqrMagnitude < 0.00001f)
-            transform.localScale = targetScale;
+        // 보이는 크기가 실제 공격력을 넘지 않게 하고, 조각이 오지 않으면 잠시 뒤 따라잡는다.
+        if (shownPower > power || Time.time - lastAbsorbQueuedTime > ShowCatchUpDelay)
+        {
+            shownPower = power;
+        }
+
+        RefreshSize(false);
+        UpdateFlash();
+
+        if (isTransitioning)
+        {
+            // 전환 중에는 StageManager가 크기를 직접 바꾼다.
+            smoothScale = transform.localScale;
+            pulse = 0f;
+            return;
+        }
+
+        smoothScale = Vector3.Lerp(smoothScale, targetScale, growSpeed * Time.deltaTime);
+        if ((smoothScale - targetScale).sqrMagnitude < 0.00001f)
+            smoothScale = targetScale;
+
+        pulse = Mathf.MoveTowards(pulse, 0f, pulseDecay * pulse * Time.deltaTime + 0.001f);
+        transform.localScale = new Vector3(smoothScale.x * (1f + pulse), smoothScale.y * (1f + pulse), smoothScale.z);
+    }
+
+    void UpdateFlash()
+    {
+        if (flashRenderer == null) return;
+        flash = Mathf.MoveTowards(flash, 0f, Time.deltaTime * 6f);
+        flashRenderer.color = new Color(flashColor.r, flashColor.g, flashColor.b, flashColor.a * flash);
     }
 }
