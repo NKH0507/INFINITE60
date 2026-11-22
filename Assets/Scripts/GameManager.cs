@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     const float BaseAbsorbRate = 0.1f;
     // zoomPowers[0] = 시작 공격력, zoomPowers[n] = n스테이지 줌아웃 기준
     float[] zoomPowers;
-    public const int FinalStage = 8;
+    public const int FinalStage = 9; // 9스테이지 = 보스 스테이지
 
     // 공격력 상한은 스테이지 전환 기준과 분리하여 항상 50,000으로 고정한다.
     public float MaxAttackPower => 50000f;
@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
         return Mathf.Clamp(attackPower, 0f, MaxAttackPower);
     }
 
-    // 기존 공격력 진행 기준을 크기 1, 2, 4, ... 128배에 연결한다.
+    // 기존 공격력 진행 기준을 크기 1, 2, 4, ... 256배에 연결한다.
     // 이 배율은 스테이지와 무관하며, 화면 크기는 여기에 스테이지별 1/2 배율을 곱한다.
     public float GetPowerSizeMultiplier(float attackPower)
     {
@@ -89,8 +89,8 @@ public class GameManager : MonoBehaviour
                 return Mathf.Lerp(Mathf.Pow(2f, i - 1), Mathf.Pow(2f, i), progress);
             }
         }
-        // 8스테이지 진입 후에도 마지막 구간의 성장 기울기를 그대로 이어간다.
-        // InverseLerp/Lerp는 범위를 제한하므로 여기서는 직접 계산하여 128배를 넘길 수 있게 한다.
+        // 마지막 스테이지 진입 후에도 마지막 구간의 성장 기울기를 그대로 이어간다.
+        // InverseLerp/Lerp는 범위를 제한하므로 여기서는 직접 계산하여 마지막 배율을 넘길 수 있게 한다.
         int lastIndex = FinalStage - 1;
         float lastStartScale = Mathf.Pow(2f, lastIndex - 1);
         float lastProgress = (clampedPower - zoomPowers[lastIndex - 1]) /
@@ -100,6 +100,11 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        int absorptionLevel = StatUpgradeButton.GetLevel(        // 흡수율 레벨
+            StatUpgradeButton.StatType.Absorption);
+
+        absorbRate = PlayerStats.GetAbsorptionRate(absorptionLevel);
+
         zoomPowers = new float[Mathf.Max(stages.Length, FinalStage) + 1];
         zoomPowers[0] = Mathf.Max(0.001f, firstStagePower);
 
@@ -135,7 +140,7 @@ public class GameManager : MonoBehaviour
     {
         if (currentStage >= FinalStage || currentStage >= stages.Length) return false;
         float attackPower = ball.GetComponent<Ball>().power;
-        // 1~6스테이지는 2배 초과, 7스테이지는 정확히 2배가 되어도 전환한다.
+        // 마지막 직전 스테이지는 기준에 정확히 도달해도 전환한다.
         return currentStage == FinalStage - 1
             ? attackPower >= zoomPowers[currentStage]
             : attackPower > zoomPowers[currentStage];
@@ -212,6 +217,7 @@ public class GameManager : MonoBehaviour
             ball.GetComponent<Ball>().RefreshSize(true);
             currentStage++;
             yield return StartCoroutine(stageManager.StageTransition(stages[currentStage - 1],ChangeStageFinished)); // StageManager에게 스테이지 전환을 맡긴다.
+            // 클리어 시간 추가(PlusTimer)는 StageManager가 전환 끝에 한 번 호출한다.
         }
         while (!hasResult && NeedsStageChange());
         isChangingStage = false;
@@ -220,13 +226,8 @@ public class GameManager : MonoBehaviour
     // 스테이지 전환이 끝난 후 실행되는 함수
     void ChangeStageFinished()
     {
-        // 보스 스테이지
-        if (currentStage % 3 == 0)
-        {
-            int chapter = currentStage / 3;
-            //배경바꾸기 추가하자
-        }
-        else if (currentStage == 8)
+        // 마지막(9) 스테이지 = 보스 스테이지. 챕터 배경은 ChapterBackground가 바꾼다.
+        if (currentStage == FinalStage)
         {
             // 인자는 스테이지 번호가 아니라 보스 목록의 순서(1부터 시작)다.
             bossManager.StartBoss(1);
@@ -303,7 +304,7 @@ public class GameManager : MonoBehaviour
         DisplayResult(false);
     }
 
-    // 8스테이지 보스 클리어 시 BossManager에서 직접 호출한다.
+    // 9스테이지 보스 클리어 시 BossManager에서 직접 호출한다.
     public void ShowGameClear()
     {
         if (currentStage != 8) return;

@@ -83,7 +83,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -132,6 +132,38 @@ PrefabInstance:
     - target: {fileID: 8558679801422309085, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: coinReward
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
@@ -166,7 +198,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -215,6 +247,38 @@ PrefabInstance:
     - target: {fileID: 8558679801422309085, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: coinReward
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
@@ -249,7 +313,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -298,6 +362,38 @@ PrefabInstance:
     - target: {fileID: 8558679801422309085, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: coinReward
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
@@ -332,7 +428,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -381,6 +477,38 @@ PrefabInstance:
     - target: {fileID: 8558679801422309085, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: coinReward
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
@@ -415,7 +543,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -464,6 +592,38 @@ PrefabInstance:
     - target: {fileID: 8558679801422309085, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: coinReward
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
@@ -498,7 +658,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -547,6 +707,38 @@ PrefabInstance:
     - target: {fileID: 8558679801422309085, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: coinReward
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
@@ -581,7 +773,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -630,6 +822,38 @@ PrefabInstance:
     - target: {fileID: 8558679801422309085, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: coinReward
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
@@ -664,7 +888,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -713,6 +937,38 @@ PrefabInstance:
     - target: {fileID: 8558679801422309085, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: coinReward
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
@@ -747,7 +1003,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -796,6 +1052,38 @@ PrefabInstance:
     - target: {fileID: 8558679801422309085, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: coinReward
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
@@ -830,7 +1118,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -879,6 +1167,38 @@ PrefabInstance:
     - target: {fileID: 8558679801422309085, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: coinReward
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
@@ -913,7 +1233,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -962,6 +1282,38 @@ PrefabInstance:
     - target: {fileID: 8558679801422309085, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: coinReward
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
@@ -996,7 +1348,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1045,6 +1397,38 @@ PrefabInstance:
     - target: {fileID: 8558679801422309085, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: coinReward
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
@@ -1079,7 +1463,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1129,6 +1513,38 @@ PrefabInstance:
       propertyPath: coinReward
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
     m_RemovedGameObjects: []
@@ -1162,7 +1578,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1212,6 +1628,38 @@ PrefabInstance:
       propertyPath: coinReward
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
     m_RemovedGameObjects: []
@@ -1245,7 +1693,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1295,6 +1743,38 @@ PrefabInstance:
       propertyPath: coinReward
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
     m_RemovedGameObjects: []
@@ -1328,7 +1808,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1378,6 +1858,38 @@ PrefabInstance:
       propertyPath: coinReward
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
     m_RemovedGameObjects: []
@@ -1411,7 +1923,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1461,6 +1973,38 @@ PrefabInstance:
       propertyPath: coinReward
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
     m_RemovedGameObjects: []
@@ -1494,7 +2038,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1544,6 +2088,38 @@ PrefabInstance:
       propertyPath: coinReward
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
     m_RemovedGameObjects: []
@@ -1577,7 +2153,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1627,6 +2203,38 @@ PrefabInstance:
       propertyPath: coinReward
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
     m_RemovedGameObjects: []
@@ -1660,7 +2268,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1710,6 +2318,38 @@ PrefabInstance:
       propertyPath: coinReward
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
     m_RemovedGameObjects: []
@@ -1743,7 +2383,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1793,6 +2433,38 @@ PrefabInstance:
       propertyPath: coinReward
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
     m_RemovedGameObjects: []
@@ -1826,7 +2498,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1876,6 +2548,38 @@ PrefabInstance:
       propertyPath: coinReward
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
     m_RemovedGameObjects: []
@@ -1909,7 +2613,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1959,6 +2663,38 @@ PrefabInstance:
       propertyPath: coinReward
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
     m_RemovedGameObjects: []
@@ -1992,7 +2728,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2042,6 +2778,38 @@ PrefabInstance:
       propertyPath: coinReward
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
     m_RemovedGameObjects: []
@@ -2075,7 +2843,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2125,6 +2893,38 @@ PrefabInstance:
       propertyPath: coinReward
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
     m_RemovedGameObjects: []
@@ -2158,7 +2958,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2208,6 +3008,38 @@ PrefabInstance:
       propertyPath: coinReward
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
     m_RemovedGameObjects: []
@@ -2241,7 +3073,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2291,6 +3123,38 @@ PrefabInstance:
       propertyPath: coinReward
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
     m_RemovedGameObjects: []
@@ -2324,7 +3188,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2374,6 +3238,38 @@ PrefabInstance:
       propertyPath: coinReward
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
     m_RemovedGameObjects: []
@@ -2407,7 +3303,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2457,6 +3353,38 @@ PrefabInstance:
       propertyPath: coinReward
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
     m_RemovedGameObjects: []
@@ -2490,7 +3418,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4181950092211330552, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2539,6 +3467,38 @@ PrefabInstance:
     - target: {fileID: 8558679801422309085, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
       propertyPath: coinReward
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 437d77187f3744598289df3ae846df49, type: 3}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592006263751201219, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8339731925427169618, guid: 78b8bb6b00320184e8facac0bb96ab15, type: 3}

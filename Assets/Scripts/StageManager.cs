@@ -17,6 +17,8 @@ public class StageManager : MonoBehaviour
     [UnityEngine.Serialization.FormerlySerializedAs("panel")]
     public PaddleMove paddle;
     public float transitionTime = 2f;
+    // 챕터 배경 (씬에서 자동으로 찾는다)
+    ChapterBackground background;
 
     // 스테이지가 실제로 플레이되는 위치
     public Vector3 playPosition = new Vector3(0f, 0f, 0f);
@@ -167,6 +169,10 @@ public class StageManager : MonoBehaviour
         Vector3 ballStartScale = ball.transform.localScale;
         // 새 스테이지 기준으로 다시 맞추는 대신, 시작 크기를 정확히 절반으로 줄인다.
         Vector3 ballTargetScale = ScaleSize2D(ballStartScale, StageShrinkRatio);
+
+        // 배경도 같은 기준점, 같은 시간으로 함께 줌아웃한다.
+        if (background == null) background = FindFirstObjectByType<ChapterBackground>();
+        if (background != null) background.PlayZoomOut(gameManager.currentStage, shrinkPivot, transitionTime);
 
         // 8. 공 + 벽돌 동시에 이동
         float time = 0f;
