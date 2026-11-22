@@ -11,17 +11,21 @@ public class GameManager : MonoBehaviour
     // 공
     public GameObject ball;
 
-    // 패널
-    public GameObject panel;
+    // 패들
+    [UnityEngine.Serialization.FormerlySerializedAs("panel")]
+    public GameObject paddle;
+
+    // 한 번 표시한 결과가 다른 종료 신호로 덮어써지는 것을 막는다.
+    bool hasResult;
 
     // 스테이지를 관리하는 StageManager
-    public stagemanager stageManager;
+    public StageManager stageManager;
 
     // 현재 스테이지 번호
     public int currentStage = 1;
 
     // 스테이지 데이터 목록
-    public stage[] stages;
+    public Stage[] stages;
 
     // 70% 이상 깨졌는지 확인
     bool isChangingStage = false;
@@ -32,7 +36,7 @@ public class GameManager : MonoBehaviour
     // 시간 관리
     public TimeManager timeManager;
 
-    public bossmanager bossManager;
+    public BossManager bossManager;
 
     // 일시정지 상태인지 확인
     public bool isPaused = false;
@@ -44,6 +48,7 @@ public class GameManager : MonoBehaviour
     public GameObject resultPanel;
 
     // 결과 화면 텍스트
+    public TMP_Text resultTitleText;
     public TMP_Text resultStageText;
     public TMP_Text resultCoinText;
 
@@ -60,11 +65,43 @@ public class GameManager : MonoBehaviour
     const float BaseAbsorbRate = 0.1f;
     // zoomPowers[0] = 시작 공격력, zoomPowers[n] = n스테이지 줌아웃 기준
     float[] zoomPowers;
+    public const int FinalStage = 8;
+
+    // 공격력 상한은 스테이지 전환 기준과 분리하여 항상 50,000으로 고정한다.
+    public float MaxAttackPower => 50000f;
+
+    public float ClampAttackPower(float attackPower)
+    {
+        return Mathf.Clamp(attackPower, 0f, MaxAttackPower);
+    }
+
+    // 기존 공격력 진행 기준을 크기 1, 2, 4, ... 128배에 연결한다.
+    // 이 배율은 스테이지와 무관하며, 화면 크기는 여기에 스테이지별 1/2 배율을 곱한다.
+    public float GetPowerSizeMultiplier(float attackPower)
+    {
+        float clampedPower = ClampAttackPower(attackPower);
+        if (clampedPower <= zoomPowers[0]) return clampedPower / zoomPowers[0];
+        for (int i = 1; i < FinalStage; i++)
+        {
+            if (clampedPower <= zoomPowers[i])
+            {
+                float progress = Mathf.InverseLerp(zoomPowers[i - 1], zoomPowers[i], clampedPower);
+                return Mathf.Lerp(Mathf.Pow(2f, i - 1), Mathf.Pow(2f, i), progress);
+            }
+        }
+        // 8스테이지 진입 후에도 마지막 구간의 성장 기울기를 그대로 이어간다.
+        // InverseLerp/Lerp는 범위를 제한하므로 여기서는 직접 계산하여 128배를 넘길 수 있게 한다.
+        int lastIndex = FinalStage - 1;
+        float lastStartScale = Mathf.Pow(2f, lastIndex - 1);
+        float lastProgress = (clampedPower - zoomPowers[lastIndex - 1]) /
+            (zoomPowers[lastIndex] - zoomPowers[lastIndex - 1]);
+        return lastStartScale * (1f + lastProgress);
+    }
 
     void Awake()
     {
-        zoomPowers = new float[stages.Length + 1];
-        zoomPowers[0] = firstStagePower;
+        zoomPowers = new float[Mathf.Max(stages.Length, FinalStage) + 1];
+        zoomPowers[0] = Mathf.Max(0.001f, firstStagePower);
 
         float totalHp = 0f;
         for (int i = 0; i < stages.Length; i++)
@@ -74,7 +111,12 @@ public class GameManager : MonoBehaviour
                 totalHp += b.hp;
 
             zoomPowers[i + 1] = zoomRate * (firstStagePower + BaseAbsorbRate * totalHp);
+            // 공격력 구간이 역전되거나 폭이 0이 되는 설정을 방지한다.
+            zoomPowers[i + 1] = Mathf.Max(zoomPowers[i + 1], zoomPowers[i] + 0.001f);
         }
+        // 개발 중 스테이지 데이터가 8개 미만이어도 상한 계산이 0이 되지 않게 한다.
+        for (int i = stages.Length + 1; i < zoomPowers.Length; i++)
+            zoomPowers[i] = zoomPowers[i - 1] * 2f;
     }
 
     // 이번 스테이지가 시작된 기준과 줌아웃 기준
@@ -84,10 +126,25 @@ public class GameManager : MonoBehaviour
     // 벽돌을 흡수할 때마다 호출. 기준을 넘으면 줌아웃
     public void CheckZoom()
     {
-        if (isChangingStage) return;
-        if (currentStage >= stages.Length) return;   // 마지막 스테이지 이후에는 줌아웃하지 않음
-        if (ball.GetComponent<ball>().power >= StageZoomPower)
+        if (hasResult || isChangingStage || isPaused || currentStage >= FinalStage) return;
+        if (NeedsStageChange())
             StartStageChange();
+    }
+
+    bool NeedsStageChange()
+    {
+        if (currentStage >= FinalStage || currentStage >= stages.Length) return false;
+        float attackPower = ball.GetComponent<Ball>().power;
+        // 1~6스테이지는 2배 초과, 7스테이지는 정확히 2배가 되어도 전환한다.
+        return currentStage == FinalStage - 1
+            ? attackPower >= zoomPowers[currentStage]
+            : attackPower > zoomPowers[currentStage];
+    }
+
+    void Update()
+    {
+        // 시작 공격력이 높거나 다른 경로에서 공격력을 올린 경우도 자동 전환한다.
+        CheckZoom();
     }
     void Start()
     {
@@ -101,17 +158,12 @@ public class GameManager : MonoBehaviour
         // 생성된 벽돌 개수 저장
         startBrickCount = stageManager.GetBrickCount();
 
-        // 다음 스테이지가 존재하면 위쪽에 미리 생성
-        if (currentStage < stages.Length)
+        // 이번 게임에서 얻은 코인 초기화
+        if (CoinManager.instance != null)
         {
-            stageManager.CreateWaitingStage(stages[currentStage]);
+            CoinManager.instance.ResetEarnedCoin();
         }
 
-        // 이번 게임에서 얻은 코인 초기화
-        if (CoinManager.Instance != null)
-        {
-            CoinManager.Instance.ResetEarnedCoin();
-        }
 
     }
 
@@ -141,8 +193,9 @@ public class GameManager : MonoBehaviour
     // 화면 전환 시작
     public void StartStageChange()
     {
-        // 이미 실행 중이면 중복 실행하지 않음
-        if (isChangingStage)
+        // 마지막 스테이지에서는 공격력 기준으로 넘어가지 않고,
+        // 보스 매니저의 클리어 함수 호출을 기다린다.
+        if (hasResult || isChangingStage || currentStage >= FinalStage || currentStage >= stages.Length)
         {
             return;
         }
@@ -153,28 +206,34 @@ public class GameManager : MonoBehaviour
     IEnumerator ChangeStage()
     {
         isChangingStage = true; // 스테이지 전환 중이라는 것을 표시
-        currentStage++; // 다음 스테이지 번호로 변경
-
-        // 다음 스테이지가 존재하는지 확인
-        if (currentStage <= stages.Length)
+        do
         {
+            // 성장 보간이 끝나지 않았어도 공격력에 맞는 실제 크기에서 축소를 시작한다.
+            ball.GetComponent<Ball>().RefreshSize(true);
+            currentStage++;
             yield return StartCoroutine(stageManager.StageTransition(stages[currentStage - 1],ChangeStageFinished)); // StageManager에게 스테이지 전환을 맡긴다.
         }
-
+        while (!hasResult && NeedsStageChange());
+        isChangingStage = false;
     }
 
     // 스테이지 전환이 끝난 후 실행되는 함수
     void ChangeStageFinished()
     {
         // 보스 스테이지
-        if (false && currentStage % 2 == 0)   // 보스 끔 (새 규칙과 맞지 않아 보류)
+        if (currentStage % 3 == 0)
         {
-            int chapter = currentStage / 2;
-            bossManager.StartBoss(chapter);
+            int chapter = currentStage / 3;
+            //배경바꾸기 추가하자
+        }
+        else if (currentStage == 8)
+        {
+            // 인자는 스테이지 번호가 아니라 보스 목록의 순서(1부터 시작)다.
+            bossManager.StartBoss(1);
         }
 
         startBrickCount = stageManager.GetBrickCount(); // 새로 생성된 스테이지의 전체 벽돌 개수를 저장한다.
-        isChangingStage = false; // 스테이지 전환이 끝났다고 표시
+        // 연속 전환이 모두 끝날 때까지 ChangeStage에서 전환 잠금을 유지한다.
     }
 
     public void OnBrickDestroyed(Brick brick)
@@ -194,12 +253,13 @@ public class GameManager : MonoBehaviour
     // 공 초기 상태로 되돌림
     public void ResetBall()
     {
-        ball.GetComponent<ball>().ResetBall();
+        ball.GetComponent<Ball>().ResetBall();
     }
 
     // 게임 일시정지
     public void PauseGame()
     {
+        if (hasResult) return;
         isPaused = true; // 일시정지 상태
         Time.timeScale = 0f; // 게임 시간 정지
         // 일시정지 UI 표시
@@ -209,6 +269,7 @@ public class GameManager : MonoBehaviour
     // 게임 재개
     public void ResumeGame()
     {
+        if (hasResult) return;
         isPaused = false; // 일시정지 해제
         Time.timeScale = 1f; // 시간 다시 돌아감
         pauseMenu.SetActive(false);
@@ -236,23 +297,33 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("StartScene");
     }
 
-    // 게임 종료 결과 화면 표시
+    // 시간 초과 등 실패 시 TimeManager에서 호출한다.
     public void ShowResult()
     {
-        // 게임 멈춤
+        DisplayResult(false);
+    }
+
+    // 8스테이지 보스 클리어 시 BossManager에서 직접 호출한다.
+    public void ShowGameClear()
+    {
+        if (currentStage != 8) return;
+        DisplayResult(true);
+    }
+
+    // 실패와 클리어가 같은 패널, 스테이지/코인 표시를 공유한다.
+    void DisplayResult(bool isClear)
+    {
+        if (hasResult) return;
+        hasResult = true;
+        timeManager.StopTimer();
         Time.timeScale = 0f;
         isPaused = true;
+        pauseMenu.SetActive(false);
 
-        // 결과 텍스트 표시
+        resultTitleText.text = isClear ? "Game Clear!" : "Gameover";
         resultStageText.text = "stage : " + currentStage;
-
-        // 이번 게임에서 획득한 코인 표시
-        if (CoinManager.Instance != null)
-        {
-            resultCoinText.text = "coin : " + CoinManager.Instance.earnedCoin;
-        }
-
-        // 결과창 표시
+        resultCoinText.text = "coin : " +
+            (CoinManager.instance != null ? CoinManager.instance.earnedCoin : 0);
         resultPanel.SetActive(true);
     }
 }

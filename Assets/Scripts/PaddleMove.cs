@@ -1,13 +1,14 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class panelmove : MonoBehaviour
+public class PaddleMove : MonoBehaviour
 {
     public float speed;
     public bool isTouchLeft;
     public bool isTouchRight;
     Vector2 mouseStartPos;
-    public ball Ball;
+    [UnityEngine.Serialization.FormerlySerializedAs("Ball")]
+    public Ball ball;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -28,8 +29,8 @@ public class panelmove : MonoBehaviour
     }
     void Move()
     {
-        // 공이 발사되지 않았으면 패널 이동 금지
-        if (!Ball.isLaunched)
+        // 공이 발사되지 않았으면 패들 이동 금지
+        if (!ball.isLaunched)
         {
             return;
         }

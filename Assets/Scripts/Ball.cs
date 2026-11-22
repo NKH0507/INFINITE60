@@ -1,12 +1,12 @@
 using System;
-using System.Diagnostics.Tracing;
+using System.Collections.Generic; // 관통 검사 결과를 재사용할 List에 필요
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ball : MonoBehaviour
+public class Ball : MonoBehaviour
 {
     public bool isTouchDown;
-
+    //공의 공격력
     public float power;
     Vector3 baseScale;
     Vector3 targetScale;
@@ -19,7 +19,10 @@ public class ball : MonoBehaviour
     public bool isTransitioning = false;
 
     Rigidbody2D rigid;
-    public Transform panel;
+    // 매 물리 프레임마다 배열을 새로 만들지 않고 검사 결과 목록을 재사용한다.
+    readonly List<RaycastHit2D> piercingHits = new List<RaycastHit2D>(32);
+    [UnityEngine.Serialization.FormerlySerializedAs("panel")]
+    public Transform paddle;
     public float offsetY = 0.5f;
 
     //전환 상태 저장 변수
@@ -50,6 +53,9 @@ public class ball : MonoBehaviour
     public float launchSpeed = 10f;
     float currentSpeed;
 
+    // 벽돌 파괴 시 흡수하는 비율 (10%)
+    public float absorptionRate = 0.1f;
+
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -64,7 +70,8 @@ public class ball : MonoBehaviour
 
         currentSpeed = launchSpeed;
         baseScale = transform.localScale;
-        power = gameManager.firstStagePower;
+        // Inspector의 Power를 시작 공격력으로 사용한다. 0 이하이면 기본 공격력을 사용한다.
+        power = gameManager.ClampAttackPower(power > 0f ? power : gameManager.firstStagePower);
         RefreshSize(true);
     }
 
@@ -79,7 +86,7 @@ public class ball : MonoBehaviour
 
 
         // 스테이지 전환 중에는
-        // 공 위치를 패널 위치로 강제로 이동시키지 않는다.
+        // 공 위치를 패들 위치로 강제로 이동시키지 않는다.
         if (isTransitioning)
         {
             return;
@@ -89,8 +96,8 @@ public class ball : MonoBehaviour
         if (!isLaunched)
         {
             transform.position = new Vector3(
-                panel.position.x,
-                panel.position.y + offsetY,
+                paddle.position.x,
+                paddle.position.y + offsetY,
                 transform.position.z
             );
 
@@ -127,6 +134,80 @@ public class ball : MonoBehaviour
         {
             ballmove();
         }
+    }
+
+    // 물리 엔진이 반사하기 전에 이번 이동 구간의 관통 대상을 처리한다.
+    void FixedUpdate()
+    {
+        // 발사 전, 스테이지 전환 중, 일시정지 중에는 벽돌을 미리 파괴하지 않는다.
+        if (!isLaunched || isTransitioning || Time.timeScale == 0f || !rigid.simulated)
+            return;
+
+        Vector2 velocity = rigid.linearVelocity;
+        // 이번 물리 프레임에 실제로 이동할 거리만 검사한다.
+        float distance = velocity.magnitude * Time.fixedDeltaTime;
+        if (distance <= 0f) return;
+
+        ContactFilter2D filter = new ContactFilter2D();
+        // 공과 충돌하도록 설정된 레이어만 대상으로 삼는다.
+        filter.SetLayerMask(Physics2D.GetLayerCollisionMask(gameObject.layer));
+        filter.useTriggers = true; // 패들/바닥 뒤의 벽돌을 먼저 파괴하지 않도록 검사
+        // 가느다란 광선 대신 공의 실제 콜라이더 모양으로 이동 경로를 검사한다.
+        rigid.Cast(velocity.normalized, filter, piercingHits, distance);
+        // 가까운 물체부터 판단해야 앞에 막힌 벽돌 너머를 먼저 파괴하지 않는다.
+        piercingHits.Sort((a, b) => a.distance.CompareTo(b.distance));
+
+        // 한 물리 프레임의 판정에는 흡수 전 공격력을 사용한다.
+        float hitPower = power;
+        int damage = Mathf.Max(1, Mathf.FloorToInt(hitPower));
+        // 먼저 공의 진행을 막거나 방향을 바꿀 가장 가까운 위치를 구한다.
+        float blockingDistance = float.PositiveInfinity;
+        foreach (RaycastHit2D hit in piercingHits)
+        {
+            Collider2D target = hit.collider;
+            if (target == null || !target.enabled) continue;
+
+            bool gameplayTrigger = target.CompareTag("paddle") || target.CompareTag("wall");
+            // 장식/감지용 Trigger는 무시하지만 패들과 바닥은 진행을 막는 것으로 취급한다.
+            if (target.isTrigger && !gameplayTrigger) continue;
+
+            Brick brick = target.GetComponent<Brick>();
+            if (target.isTrigger || !CanPierce(brick, hitPower, damage))
+            {
+                // 일반 벽돌의 피해와 반사는 기존 물리 충돌 처리에 맡긴다.
+                blockingDistance = hit.distance;
+                break;
+            }
+        }
+
+        foreach (RaycastHit2D hit in piercingHits)
+        {
+            // 같은 거리의 벽/일반 벽돌을 우선하여 뒤쪽을 먼저 파괴하지 않는다.
+            if (hit.distance >= blockingDistance) break;
+            Collider2D target = hit.collider;
+            if (target == null || !target.enabled || target.isTrigger) continue;
+
+            Brick brick = target.GetComponent<Brick>();
+            if (!CanPierce(brick, hitPower, damage)) continue;
+
+            // 이번 타격으로 파괴될 벽돌만 비활성화하여 Destroy 대기 중 반사를 막는다.
+            foreach (Collider2D brickCollider in brick.GetComponents<Collider2D>())
+                brickCollider.enabled = false;
+            // 기존 피해 함수를 재사용하여 흡수/코인/파괴 보상이 중복되지 않게 한다.
+            brick.OnHit(damage);
+
+            // 흡수로 스테이지 전환이 시작되면 이전 검사 결과를 사용하지 않는다.
+            if (isTransitioning || !isLaunched || !rigid.simulated || Time.timeScale == 0f)
+                break;
+        }
+    }
+
+    static bool CanPierce(Brick brick, float hitPower, int damage)
+    {
+        // 최대 HP가 초기화된 살아 있는 벽돌만 검사한다.
+        // 공격력 3배 조건에 더해 실제로 이번 타격에 죽는지 확인해야 안전하게 충돌을 끌 수 있다.
+        return brick != null && brick.hp > 0 && brick.maxHp > 0
+            && hitPower >= brick.maxHp * 3f && damage >= brick.hp;
     }
 
     void ShowAimDirection()
@@ -188,6 +269,7 @@ public class ball : MonoBehaviour
     // 충돌 플래그 생성 + 공 튕기기
     void OnTriggerEnter2D(Collider2D collision)
     {
+
         if (collision.gameObject.tag == "wall")
         {
             if (collision.gameObject.name == "downwall")
@@ -197,30 +279,30 @@ public class ball : MonoBehaviour
             }
 
         }
-        else if (collision.gameObject.tag == "panel")
+        else if (collision.gameObject.tag == "paddle")
         {
             float speed = rigid.linearVelocity.magnitude; // 현재 공의 속도
 
-            // 패널의 가운데 X 좌표
-            float panelCenter = collision.transform.position.x;
+            // 패들의 가운데 X 좌표
+            float paddleCenter = collision.transform.position.x;
 
-            // 공이 패널 가운데에서 얼마나 떨어져 맞았는지
-            float hitPoint = transform.position.x - panelCenter;
+            // 공이 패들 가운데에서 얼마나 떨어져 맞았는지
+            float hitPoint = transform.position.x - paddleCenter;
 
-            // 패널의 절반 너비
-            float panelWidth = collision.bounds.size.x / 2;
+            // 패들의 절반 너비
+            float paddleHalfWidth = collision.bounds.size.x / 2;
 
             // -1 ~ 1 사이의 값으로 변환
-            float h = hitPoint / panelWidth;
+            float h = hitPoint / paddleHalfWidth;
 
-            Vector2 direction = new Vector2(h, 1f).normalized; // 패널에 맞는 위치에 따라 방향 결정
+            Vector2 direction = new Vector2(h, 1f).normalized; // 패들에 맞는 위치에 따라 방향 결정
             rigid.linearVelocity = direction * speed; // 속도 크기는 그대로 유지
         }
-
     }
-
     void OnCollisionEnter2D(Collision2D collision)
     {
+        // 관통은 FixedUpdate에서 충돌 전에 처리한다.
+        // 여기서 IgnoreCollision을 호출해도 이미 계산된 반사를 되돌릴 수는 없다.
         if (collision.gameObject.CompareTag("wall"))
         {
             // 물리 엔진이 계산한 반사 방향을 그대로 사용한다.
@@ -244,7 +326,8 @@ public class ball : MonoBehaviour
     public void RestoreBallState()
     {
         // 물리 기능 다시 켜기
-        rigid.simulated = true;
+        // 발사 전 자동 전환이라면 물리를 켜지 않고 패들 위 대기 상태를 유지한다.
+        rigid.simulated = savedIsLaunched;
 
         // 저장해 둔 이동 방향으로 다시 움직인다.
         if (savedVelocity != Vector2.zero)
@@ -298,8 +381,8 @@ public class ball : MonoBehaviour
         // 회전 속도 제거
         rigid.angularVelocity = 0f;
 
-        // 패널 가운데 위로 이동
-        transform.position = new Vector3(panel.position.x, panel.position.y + offsetY, transform.position.z);
+        // 패들 가운데 위로 이동
+        transform.position = new Vector3(paddle.position.x, paddle.position.y + offsetY, transform.position.z);
     }
 
     // 플래그 지우기
@@ -318,20 +401,18 @@ public class ball : MonoBehaviour
 
     public void AddPower(float amount)
     {
-        power += amount;
+        // 추가 흡수를 해도 공격력은 최종 상한인 50,000을 넘지 않는다.
+        power = gameManager.ClampAttackPower(power + amount);
         RefreshSize(false);
     }
 
     public Vector3 SizeForCurrentStage()
     {
-        float start = gameManager.StageStartPower;
-        float zoom = gameManager.StageZoomPower;
-
-        // 기준이 잘못 잡혀 0으로 나누는 일 방지
-        if (zoom <= start) return baseScale;
-
-        float progress = (power - start) / (zoom - start);   // 0이면 시작, 1이면 줌아웃
-        return baseScale * Mathf.Clamp(1f + progress, 0.5f, 2.5f);
+        float powerScale = gameManager.GetPowerSizeMultiplier(power);
+        float stageScale = Mathf.Pow(0.5f, gameManager.currentStage - 1);
+        // 단계별 크기 제한은 없다. Z는 유지하고 화면의 가로/세로만 축소한다.
+        float sizeMultiplier = powerScale * stageScale;
+        return new Vector3(baseScale.x * sizeMultiplier, baseScale.y * sizeMultiplier, baseScale.z);
     }
 
     public void RefreshSize(bool instant)
@@ -342,6 +423,9 @@ public class ball : MonoBehaviour
 
     void LateUpdate()
     {
+        // 실행 중 Inspector에서 공격력을 직접 변경한 경우에도 상한과 목표 크기를 갱신한다.
+        power = gameManager.ClampAttackPower(power);
+        RefreshSize(false);
         if (isTransitioning) return;
         if (transform.localScale == targetScale) return;
 

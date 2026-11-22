@@ -1,19 +1,19 @@
-using System;
 using UnityEngine;
 
 public interface IBossChapter
 {
-    void StartBoss(bossmanager manager);
+    void StartBoss(BossManager manager);
     void OnBrickDestroyed(Brick brick);
     void EndBoss();
 }
 
-public class bossmanager : MonoBehaviour
+public class BossManager : MonoBehaviour
 {
     public MonoBehaviour[] chapterBosses; // 챕터별 보스 스크립트
     IBossChapter currentBoss; // 현재 실행 중인 챕터 보스
     bool isCleared = false;
-    public event Action OnBossCleared; // GameManager에 클리어를 알리는 이벤트
+    // 클리어 이벤트 대신 연결된 게임 매니저의 함수를 직접 호출한다.
+    public GameManager gameManager;
 
     // 보스 시작
     public void StartBoss(int chapter)
@@ -69,7 +69,7 @@ public class bossmanager : MonoBehaviour
         isCleared = true;
 
         Debug.Log("보스 스테이지 클리어!");
-        OnBossCleared?.Invoke(); // GameManager에 알림
+        gameManager.ShowGameClear();
     }
 
     // 보스 종료

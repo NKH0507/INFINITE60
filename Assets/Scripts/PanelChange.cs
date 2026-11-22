@@ -3,93 +3,108 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class PanelChange : MonoBehaviour
 {
-    public GameObject HomePanel;
-    public GameObject UpgradePanel;
-    public GameObject UpgradeText;
-    public GameObject UpgradeButton1;
-    public GameObject UpgradeButton2;
-    public GameObject UpgradeButton3;
-    public GameObject UpgradeButton4;
+    [UnityEngine.Serialization.FormerlySerializedAs("HomePanel")]
+    public GameObject homePanel;
+    [UnityEngine.Serialization.FormerlySerializedAs("UpgradePanel")]
+    public GameObject upgradePanel;
+    [UnityEngine.Serialization.FormerlySerializedAs("UpgradeText")]
+    public GameObject upgradeText;
+    [UnityEngine.Serialization.FormerlySerializedAs("UpgradeButton1")]
+    public GameObject upgradeButton1;
+    [UnityEngine.Serialization.FormerlySerializedAs("UpgradeButton2")]
+    public GameObject upgradeButton2;
+    [UnityEngine.Serialization.FormerlySerializedAs("UpgradeButton3")]
+    public GameObject upgradeButton3;
+    [UnityEngine.Serialization.FormerlySerializedAs("UpgradeButton4")]
+    public GameObject upgradeButton4;
 
-    public GameObject SkinPanel;
-    public GameObject SkinButton1;
-    public GameObject SkinButton2;
-    public GameObject SkinButton3;
-    public GameObject SkinButton4;
-    public GameObject SkinText;
+    [UnityEngine.Serialization.FormerlySerializedAs("SkinPanel")]
+    public GameObject skinPanel;
+    [UnityEngine.Serialization.FormerlySerializedAs("SkinButton1")]
+    public GameObject skinButton1;
+    [UnityEngine.Serialization.FormerlySerializedAs("SkinButton2")]
+    public GameObject skinButton2;
+    [UnityEngine.Serialization.FormerlySerializedAs("SkinButton3")]
+    public GameObject skinButton3;
+    [UnityEngine.Serialization.FormerlySerializedAs("SkinButton4")]
+    public GameObject skinButton4;
+    [UnityEngine.Serialization.FormerlySerializedAs("SkinText")]
+    public GameObject skinText;
 
 
 
-    public GameObject StartButton;
-    public GameObject Title;
+    [UnityEngine.Serialization.FormerlySerializedAs("StartButton")]
+    public GameObject startButton;
+    [UnityEngine.Serialization.FormerlySerializedAs("Title")]
+    public GameObject title;
 
 
 
     public void OpenHomePanel()
     {
-        Title.SetActive(true);
-        StartButton.SetActive(true);
-        HomePanel.SetActive(true);
-        UpgradePanel.SetActive(false);
-        UpgradeButton1.SetActive(false);
-        UpgradeButton2.SetActive(false);
-        UpgradeButton3.SetActive(false);
-        UpgradeButton4.SetActive(false);
-        UpgradeText.SetActive(false);
+        title.SetActive(true);
+        startButton.SetActive(true);
+        homePanel.SetActive(true);
+        upgradePanel.SetActive(false);
+        upgradeButton1.SetActive(false);
+        upgradeButton2.SetActive(false);
+        upgradeButton3.SetActive(false);
+        upgradeButton4.SetActive(false);
+        upgradeText.SetActive(false);
 
 
-        SkinPanel.SetActive(false);
-        SkinText.SetActive(false);
-        SkinButton1.SetActive(false);
-        SkinButton2.SetActive(false);
-        SkinButton3.SetActive(false);
-        SkinButton4.SetActive(false);
+        skinPanel.SetActive(false);
+        skinText.SetActive(false);
+        skinButton1.SetActive(false);
+        skinButton2.SetActive(false);
+        skinButton3.SetActive(false);
+        skinButton4.SetActive(false);
     }
 
     public void OpenUpgradePanel()
     {
-        HomePanel.SetActive(false);
-        UpgradePanel.SetActive(true);
-        SkinPanel.SetActive(false);
-        Title.SetActive(false);
-        StartButton.SetActive(false);
+        homePanel.SetActive(false);
+        upgradePanel.SetActive(true);
+        skinPanel.SetActive(false);
+        title.SetActive(false);
+        startButton.SetActive(false);
 
-        UpgradePanel.SetActive(true);
-        UpgradeButton1.SetActive(true);
-        UpgradeButton2.SetActive(true);
-        UpgradeButton3.SetActive(true);
-        UpgradeButton4.SetActive(true);
-        UpgradeText.SetActive(true);
+        upgradePanel.SetActive(true);
+        upgradeButton1.SetActive(true);
+        upgradeButton2.SetActive(true);
+        upgradeButton3.SetActive(true);
+        upgradeButton4.SetActive(true);
+        upgradeText.SetActive(true);
 
 
-        SkinText.SetActive(false);
-        SkinPanel.SetActive(false);
-        SkinButton1.SetActive(false);
-        SkinButton2.SetActive(false);
-        SkinButton3.SetActive(false);
-        SkinButton4.SetActive(false);
+        skinText.SetActive(false);
+        skinPanel.SetActive(false);
+        skinButton1.SetActive(false);
+        skinButton2.SetActive(false);
+        skinButton3.SetActive(false);
+        skinButton4.SetActive(false);
     }
     public void OpenSkinPanel()
     {
-        HomePanel.SetActive(false);
-        UpgradePanel.SetActive(false);
-        SkinPanel.SetActive(true);
-        Title.SetActive(false);
-        StartButton.SetActive(false);
+        homePanel.SetActive(false);
+        upgradePanel.SetActive(false);
+        skinPanel.SetActive(true);
+        title.SetActive(false);
+        startButton.SetActive(false);
 
-        UpgradePanel.SetActive(false);
-        UpgradeButton1.SetActive(false);
-        UpgradeButton2.SetActive(false);
-        UpgradeButton3.SetActive(false);
-        UpgradeButton4.SetActive(false);
-        UpgradeText.SetActive(false);
+        upgradePanel.SetActive(false);
+        upgradeButton1.SetActive(false);
+        upgradeButton2.SetActive(false);
+        upgradeButton3.SetActive(false);
+        upgradeButton4.SetActive(false);
+        upgradeText.SetActive(false);
 
 
-        SkinText.SetActive(true);
-        SkinPanel.SetActive(true);
-        SkinButton1.SetActive(true);
-        SkinButton2.SetActive(true);
-        SkinButton3.SetActive(true);
-        SkinButton4.SetActive(true);
+        skinText.SetActive(true);
+        skinPanel.SetActive(true);
+        skinButton1.SetActive(true);
+        skinButton2.SetActive(true);
+        skinButton3.SetActive(true);
+        skinButton4.SetActive(true);
     }
 }

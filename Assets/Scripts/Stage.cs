@@ -2,7 +2,7 @@ using UnityEngine;
 
 // Unity에서 Stage Data 파일을 직접 만들 수 있게 해준다.
 [CreateAssetMenu(fileName = "StageData", menuName = "Game/Stage Data")]
-public class stage : ScriptableObject
+public class Stage : ScriptableObject
 {
     // 스테이지 번호
     public int stageNumber;

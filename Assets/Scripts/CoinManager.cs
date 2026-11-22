@@ -4,7 +4,7 @@ using TMPro;
 
 public class CoinManager : MonoBehaviour
 {
-    public static CoinManager Instance; // 다른 스크립트에서 접근할 수 있도록 설정
+    public static CoinManager instance; // 다른 스크립트에서 접근할 수 있도록 설정
     public int coin = 0; // 현재 보유 코인
     TMP_Text coinText; // 코인 표시 텍스트
     public int earnedCoin = 0; // 이번 게임에서 얻은 코인
@@ -12,13 +12,13 @@ public class CoinManager : MonoBehaviour
     void Awake()
     {
         // 코인매니저 중복 생성 방지
-        if (Instance != null && Instance != this)
+        if (instance != null && instance != this)
         {
             Destroy(gameObject);
             return;
         }
 
-        Instance = this;
+        instance = this;
         DontDestroyOnLoad(gameObject); // 씬이 변경되어도 코인매니저 유지
         coin = PlayerPrefs.GetInt("Coin", 0); // 저장된 코인 불러오기
         SceneManager.sceneLoaded += OnSceneLoaded; // 씬이 변경되었을 때 실행
@@ -130,10 +130,10 @@ public class CoinManager : MonoBehaviour
 
     void OnDestroy()
     {
-        if (Instance == this)
+        if (instance == this)
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
-            Instance = null;
+            instance = null;
         }
     }
 }
