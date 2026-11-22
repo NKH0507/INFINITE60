@@ -100,6 +100,11 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        int absorptionLevel = StatUpgradeButton.GetLevel(        // 흡수율 레벨
+            StatUpgradeButton.StatType.Absorption);
+
+        absorbRate = PlayerStats.GetAbsorptionRate(absorptionLevel);
+
         zoomPowers = new float[Mathf.Max(stages.Length, FinalStage) + 1];
         zoomPowers[0] = Mathf.Max(0.001f, firstStagePower);
 
@@ -212,6 +217,8 @@ public class GameManager : MonoBehaviour
             ball.GetComponent<Ball>().RefreshSize(true);
             currentStage++;
             yield return StartCoroutine(stageManager.StageTransition(stages[currentStage - 1],ChangeStageFinished)); // StageManager에게 스테이지 전환을 맡긴다.
+           
+            timeManager.PlusTimer();
         }
         while (!hasResult && NeedsStageChange());
         isChangingStage = false;

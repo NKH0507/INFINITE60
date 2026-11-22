@@ -8,6 +8,7 @@ public class CoinManager : MonoBehaviour
     public int coin = 0; // 현재 보유 코인
     TMP_Text coinText; // 코인 표시 텍스트
     public int earnedCoin = 0; // 이번 게임에서 얻은 코인
+    private int coinRewardRemainder = 0; // 아직 1코인이 되지 않은 보상을 모아둠
 
     void Awake()
     {
@@ -89,10 +90,32 @@ public class CoinManager : MonoBehaviour
         UpdateCoinText();
     }
 
+    // 업그레이드 보상 계산, 코인 저장과 화면 갱신
+    public void AddRewardCoin(int baseAmount)
+    {
+        if (baseAmount <= 0)
+        {
+            return;
+        }
+
+        int level = StatUpgradeButton.GetLevel(
+            StatUpgradeButton.StatType.CoinGain);
+
+        int percent = PlayerStats.GetCoinReward(100, level);
+
+        long total = (long)baseAmount * percent + coinRewardRemainder;
+
+        int reward = (int)(total / 100);
+        coinRewardRemainder = (int)(total % 100);
+
+        AddCoin(reward);
+    }
+
     // 이번 게임에서 얻은 코인 초기화
     public void ResetEarnedCoin()
     {
         earnedCoin = 0;
+        coinRewardRemainder = 0;
     }
 
     // 코인 사용
