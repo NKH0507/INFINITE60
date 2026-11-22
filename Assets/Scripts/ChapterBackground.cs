@@ -299,10 +299,10 @@ public class ChapterBackground : MonoBehaviour
     }
 
     // ---------- 챕터 구름 (도시 → 우주) ----------
-    // 우주 그림 속 지구 위 작은 구름 하나가 이야기의 연결 고리다.
-    // 6→7: 도시 배경이 줌아웃되며 흐려지고, 그 구름을 엄청 확대한 모습이 화면을 덮으며 나타난다.
-    //      (우주 배경은 구름이 화면을 다 덮는 배율로 확대되어 있다)
-    // 7→8→9: 우주 배경이 줌아웃되면서 구름도 같이 작아져, 지구 위 작은 구름이 된다.
+    // 우주 그림 속 지구 위 작은 구름 하나가 연결 고리다.
+    // 6→7: 도시가 줌아웃되며 흐려지는 동안 그 구름을 엄청 확대한 모습이 화면을 덮고,
+    //      이어서 우주 배경이 크게 줌아웃되며 구름이 작아져 7스테이지 배경(4배)이 된다.
+    // 7→8→9: 평소처럼 4배 → 2배 → 1배. 구름은 지구 위에 계속 붙어 있다.
     IEnumerator CloudInRoutine(int nextChapter, float endZoom, float duration)
     {
         // 이전 배경(도시)은 앞쪽 렌더러로 옮겨 줌아웃하며 흐려진다.
@@ -314,10 +314,11 @@ public class ChapterBackground : MonoBehaviour
         prevAlpha = 1f;
         float prevStart = mainZoom;
 
-        // 다음 배경(우주)은 구름이 화면을 덮는 배율보다 조금 더 확대된 상태에서 시작한다.
+        // 다음 배경(우주)은 구름이 화면을 다 덮는 배율에서 시작한다.
         mainChapter = nextChapter;
         mainRenderer.sprite = GetSprite(nextChapter);
-        float startZoom = endZoom * 1.4f;
+        float startZoom = Mathf.Max(ZoomToFillScreen(nextChapter, CloudCore(nextChapter)) * 1.2f, endZoom * ZoomStep);
+        mainZoom = startZoom;
 
         chapterCloud.enabled = true;
         float time = 0f;
@@ -326,11 +327,15 @@ public class ChapterBackground : MonoBehaviour
             time += Time.deltaTime;
             float t = duration > 0f ? Mathf.Clamp01(time / duration) : 1f;
 
-            prevZoom = Mathf.Lerp(prevStart, prevStart / ZoomStep, t);
-            prevAlpha = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.2f, 1f, t));
-            mainZoom = Mathf.Exp(Mathf.Lerp(Mathf.Log(startZoom), Mathf.Log(endZoom), t));
-            // 구름은 도시보다 먼저 다 차올라서 그 뒤의 우주가 비치지 않게 한다.
-            chapterCloudAlpha = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0f, 0.5f, t));
+            // 앞부분: 도시는 줌아웃되며 사라지고, 구름이 먼저 화면을 다 덮는다.
+            prevZoom = Mathf.Lerp(prevStart, prevStart / ZoomStep, Mathf.Clamp01(t / 0.35f));
+            prevAlpha = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.1f, 0.35f, t));
+            chapterCloudAlpha = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0f, 0.25f, t));
+
+            // 뒷부분: 우주 배경이 크게 줌아웃되며 구름이 지구 위 작은 구름이 된다.
+            float u = Mathf.InverseLerp(0.3f, 1f, t);
+            float ease = 1f - (1f - u) * (1f - u);
+            mainZoom = Mathf.Exp(Mathf.Lerp(Mathf.Log(startZoom), Mathf.Log(endZoom), ease));
 
             if (t >= 1f) break;
             yield return null;
@@ -465,14 +470,7 @@ public class ChapterBackground : MonoBehaviour
             ? chapterStartStages[chapter + 1] - 1
             : GameManager.FinalStage;
         int stepsLeft = Mathf.Max(0, chapterEnd - stage);
-        float zoom = Mathf.Pow(ZoomStep, stepsLeft);
-
-        // 구름 챕터의 첫 스테이지는 구름이 화면을 다 덮을 만큼 확대한다.
-        if (HasCloud(chapter) && chapter < chapterStartStages.Length && stage == chapterStartStages[chapter] && targetCamera != null)
-        {
-            zoom = Mathf.Max(zoom, ZoomToFillScreen(chapter, CloudCore(chapter)));
-        }
-        return zoom;
+        return Mathf.Pow(ZoomStep, stepsLeft);
     }
 
     Sprite GetSprite(int chapter)
