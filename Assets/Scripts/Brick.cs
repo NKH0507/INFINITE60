@@ -16,6 +16,10 @@ public class Brick : MonoBehaviour
     // SpriteRenderer를 연결
     [SerializeField] private SpriteRenderer pierceOutline;
 
+    // 금 간 모습: 벽돌 위에 겹쳐 그리는 렌더러와 단계별 이미지 (1단계, 2단계, 3단계 순서)
+    [SerializeField] private SpriteRenderer crackRenderer;
+    [SerializeField] private Sprite[] crackSprites;
+
     // 공의 현재 공격력을 확인하기 위한 참조.
     private Ball playerBall;
 
@@ -33,6 +37,25 @@ public class Brick : MonoBehaviour
         {
             pierceOutline.enabled = false;
         }
+
+        UpdateCrack();
+    }
+
+    // 남은 체력 비율에 맞춰 금 간 단계를 바꾼다.
+    // 75% 이하 1단계, 50% 이하 2단계, 25% 이하 3단계
+    void UpdateCrack()
+    {
+        if (crackRenderer == null || crackSprites == null || crackSprites.Length == 0 || maxHp <= 0)
+        {
+            return;
+        }
+
+        float ratio = (float)hp / maxHp;
+        int stage = ratio <= 0.25f ? 3 : ratio <= 0.5f ? 2 : ratio <= 0.75f ? 1 : 0;
+        stage = Mathf.Min(stage, crackSprites.Length);
+
+        crackRenderer.sprite = stage == 0 ? null : crackSprites[stage - 1];
+        crackRenderer.enabled = stage > 0;
     }
 
     // 벽돌 파괴로 공의 공격력이 증가하면 그 결과를 테두리에 반영.
@@ -73,6 +96,7 @@ public class Brick : MonoBehaviour
         // 살아 있으면 종료하여 파괴/보상 처리를 실행하지 않는다.
         if (hp > 0)
         {
+            UpdateCrack();
             return;
         }
 
