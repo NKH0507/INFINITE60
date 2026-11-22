@@ -217,8 +217,7 @@ public class GameManager : MonoBehaviour
             ball.GetComponent<Ball>().RefreshSize(true);
             currentStage++;
             yield return StartCoroutine(stageManager.StageTransition(stages[currentStage - 1],ChangeStageFinished)); // StageManager에게 스테이지 전환을 맡긴다.
-           
-            timeManager.PlusTimer();
+            // 클리어 시간 추가(PlusTimer)는 StageManager가 전환 끝에 한 번 호출한다.
         }
         while (!hasResult && NeedsStageChange());
         isChangingStage = false;
