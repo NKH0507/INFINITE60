@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 // 챕터별 배경을 보여주고, 스테이지 줌아웃에 맞춰 배경도 함께 줌아웃한다.
@@ -44,6 +45,12 @@ public class ChapterBackground : MonoBehaviour
     // 창문 안에 남는 이전 그림의 투명도
     [SerializeField, Range(0f, 1f)] private float portalAlpha = 0.45f;
 
+    // 구름으로 넘어가는 챕터 (도시 → 우주). 구름이 양옆에서 덮었다가 갈라지며 다음 배경이 나온다.
+    [SerializeField] private bool[] cloudTransitionInto = { false, false, true };
+
+    // 구름 그림 (왼쪽 구름 기준, 오른쪽은 좌우 반전). 비워두면 코드로 만든 임시 구름을 쓴다.
+    [SerializeField] private Sprite cloudSprite;
+
     // 줌아웃 한 번의 배율 (StageManager의 StageShrinkRatio 0.5와 짝)
     private const float ZoomStep = 2f;
 
@@ -68,6 +75,17 @@ public class ChapterBackground : MonoBehaviour
     private Vector3 pivot;
     private Coroutine running;
 
+    // 배경이 화면보다 작아질 때 빈 곳을 채우는 그라데이션 (배경 맨 위/아래 색)
+    private SpriteRenderer backdrop;
+    private Texture2D backdropTexture;
+    private int backdropChapter = -1;
+
+    // 구름 전환
+    private SpriteRenderer cloudLeft;
+    private SpriteRenderer cloudRight;
+    private float cloudClose;   // 0 = 화면 밖, 1 = 가운데에서 만남
+    private float cloudAlpha;
+
     void Awake()
     {
         mainRenderer = GetComponent<SpriteRenderer>();
@@ -87,6 +105,33 @@ public class ChapterBackground : MonoBehaviour
         portalMask = maskObject.AddComponent<SpriteMask>();
         portalMask.sprite = Sprite.Create(Texture2D.whiteTexture, new Rect(0, 0, 4, 4), new Vector2(0.5f, 0.5f), 4f);
         portalMask.enabled = false;
+
+        // 빈 곳 채우기용 그라데이션: 위아래 두 색을 부드럽게 늘린다.
+        backdropTexture = new Texture2D(1, 2, TextureFormat.RGBA32, false);
+        backdropTexture.filterMode = FilterMode.Bilinear;
+        backdropTexture.wrapMode = TextureWrapMode.Clamp;
+        backdrop = new GameObject("Background_Backdrop").AddComponent<SpriteRenderer>();
+        backdrop.sprite = Sprite.Create(backdropTexture, new Rect(0, 0, 1, 2), new Vector2(0.5f, 0.5f), 1f);
+        backdrop.sharedMaterial = mainRenderer.sharedMaterial;
+        backdrop.sortingLayerID = mainRenderer.sortingLayerID;
+        backdrop.sortingOrder = mainRenderer.sortingOrder - 1;
+
+        // 구름: 배경보다 앞, 벽돌과 공보다 뒤
+        Sprite cloud = cloudSprite != null ? cloudSprite : CreateCloudSprite();
+        cloudLeft = CreateCloud("Background_CloudLeft", cloud, false);
+        cloudRight = CreateCloud("Background_CloudRight", cloud, true);
+    }
+
+    SpriteRenderer CreateCloud(string objectName, Sprite sprite, bool flip)
+    {
+        SpriteRenderer sr = new GameObject(objectName).AddComponent<SpriteRenderer>();
+        sr.sprite = sprite;
+        sr.flipX = flip;
+        sr.sharedMaterial = mainRenderer.sharedMaterial;
+        sr.sortingLayerID = mainRenderer.sortingLayerID;
+        sr.sortingOrder = mainRenderer.sortingOrder + 2;
+        sr.enabled = false;
+        return sr;
     }
 
     void Start()
@@ -110,6 +155,8 @@ public class ChapterBackground : MonoBehaviour
         }
 
         Apply(mainRenderer, mainChapter, mainZoom);
+        UpdateBackdrop();
+        LayoutClouds();
 
         if (prevMode == PrevMode.Fade)
         {
@@ -149,6 +196,14 @@ public class ChapterBackground : MonoBehaviour
         // 이전 전환에서 창문 안에 남은 그림이 있으면 이번 전환 동안 완전히 사라지게 한다.
         bool fadeOutPortal = prevMode == PrevMode.Portal;
         float portalStartAlpha = prevAlpha;
+
+        if (chapterChanged && UsesClouds(nextChapter))
+        {
+            ClearPrevious();
+            yield return CloudRoutine(nextChapter, endZoom, duration);
+            running = null;
+            yield break;
+        }
 
         if (chapterChanged)
         {
@@ -243,6 +298,166 @@ public class ChapterBackground : MonoBehaviour
         prevRenderer.enabled = false;
         prevRenderer.maskInteraction = SpriteMaskInteraction.None;
         portalMask.enabled = false;
+    }
+
+    // ---------- 구름 전환 ----------
+
+    // 전반부: 이전 배경이 계속 줌아웃되고 구름이 양옆에서 닫힌다.
+    // 가운데: 구름 뒤에서 다음 챕터 배경으로 바꾼다.
+    // 후반부: 구름이 갈라지며 흐려지고, 다음 배경이 줌아웃되며 나온다.
+    IEnumerator CloudRoutine(int nextChapter, float endZoom, float duration)
+    {
+        float oldStart = mainZoom;
+        float oldEnd = mainZoom * 0.8f;          // 살짝 더 멀어진다. 빈 곳은 그라데이션이 채운다.
+        float newStart = endZoom * 1.6f;
+        bool swapped = false;
+        cloudLeft.enabled = cloudRight.enabled = true;
+
+        float time = 0f;
+        while (true)
+        {
+            time += Time.deltaTime;
+            float t = duration > 0f ? Mathf.Clamp01(time / duration) : 1f;
+
+            if (t < 0.5f)
+            {
+                float a = t / 0.5f;
+                mainZoom = Mathf.Lerp(oldStart, oldEnd, a);
+                float c = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.3f, 1f, a));
+                cloudClose = c;
+                cloudAlpha = c;
+            }
+            else
+            {
+                if (!swapped)
+                {
+                    swapped = true;
+                    mainChapter = nextChapter;
+                    mainRenderer.sprite = GetSprite(nextChapter);
+                }
+                float b = (t - 0.5f) / 0.5f;
+                mainZoom = Mathf.Lerp(newStart, endZoom, b);
+                cloudClose = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0f, 0.7f, b));
+                cloudAlpha = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.2f, 1f, b));
+            }
+
+            if (t >= 1f) break;
+            yield return null;
+        }
+
+        mainZoom = endZoom;
+        cloudClose = 0f;
+        cloudAlpha = 0f;
+        cloudLeft.enabled = cloudRight.enabled = false;
+    }
+
+    bool UsesClouds(int chapter)
+    {
+        return cloudTransitionInto != null && chapter < cloudTransitionInto.Length && cloudTransitionInto[chapter];
+    }
+
+    void LayoutClouds()
+    {
+        if (!cloudLeft.enabled) return;
+
+        Rect screen = ScreenRect();
+        Vector2 size = cloudLeft.sprite.bounds.size;
+        float width = screen.width * 0.9f;
+        float height = screen.height * 1.2f;
+        Vector3 scale = new Vector3(width / size.x, height / size.y, 1f);
+
+        // 닫혔을 때 구름의 꽉 찬 부분(가로 65%)이 화면 가운데를 조금 넘는다.
+        float closedCenter = screen.center.x + screen.width * 0.05f - width * (0.65f - 0.5f);
+        float openCenter = screen.xMin - width * 0.5f;
+        float leftX = Mathf.Lerp(openCenter, closedCenter, cloudClose);
+        float rightX = screen.center.x * 2f - leftX;
+        float z = transform.position.z;
+
+        cloudLeft.transform.localScale = scale;
+        cloudRight.transform.localScale = scale;
+        cloudLeft.transform.position = new Vector3(leftX, screen.center.y, z);
+        cloudRight.transform.position = new Vector3(rightX, screen.center.y, z);
+        Color c = new Color(1f, 1f, 1f, cloudAlpha);
+        cloudLeft.color = c;
+        cloudRight.color = c;
+    }
+
+    // 왼쪽에서 들어오는 도트 구름 (오른쪽 가장자리가 몽글몽글)
+    static Sprite CreateCloudSprite()
+    {
+        const int w = 48, h = 96;
+        const int baseEdge = 31; // 이 x까지는 꽉 찬 구름
+        Texture2D tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
+        tex.filterMode = FilterMode.Point;
+        tex.wrapMode = TextureWrapMode.Clamp;
+
+        System.Random rng = new System.Random(7);
+        List<Vector3> bumps = new List<Vector3>(); // x, y, 반지름
+        for (int y = -4; y < h + 8; y += 9)
+        {
+            bumps.Add(new Vector3(baseEdge + rng.Next(-3, 4), y + rng.Next(-2, 3), rng.Next(7, 13)));
+        }
+
+        Color white = new Color(1f, 1f, 1f, 1f);
+        Color shade = new Color(0.86f, 0.9f, 0.97f, 1f);
+        for (int y = 0; y < h; y++)
+        {
+            for (int x = 0; x < w; x++)
+            {
+                bool inside = x < baseEdge;
+                bool shaded = false;
+                foreach (Vector3 b in bumps)
+                {
+                    float dx = x - b.x, dy = y - b.y;
+                    float d2 = dx * dx + dy * dy;
+                    if (d2 <= b.z * b.z)
+                    {
+                        inside = true;
+                        // 몽글한 부분의 아래쪽 테두리는 살짝 푸르게
+                        if (dy < 0 && d2 > (b.z - 2.5f) * (b.z - 2.5f)) shaded = true;
+                    }
+                }
+                tex.SetPixel(x, y, inside ? (shaded ? shade : white) : Color.clear);
+            }
+        }
+        tex.Apply();
+        return Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f), 16f);
+    }
+
+    // 현재 챕터 배경의 맨 위/아래 색으로 그라데이션을 만들고 화면에 깐다.
+    void UpdateBackdrop()
+    {
+        Rect screen = ScreenRect();
+        backdrop.transform.position = new Vector3(screen.center.x, screen.center.y, transform.position.z + 1f);
+        backdrop.transform.localScale = new Vector3(screen.width * 1.1f, screen.height * 1.1f / 2f, 1f);
+
+        if (backdropChapter == mainChapter) return;
+        backdropChapter = mainChapter;
+
+        Sprite sprite = mainRenderer.sprite;
+        Color top = targetCamera.backgroundColor, bottom = targetCamera.backgroundColor;
+        if (sprite != null && sprite.texture != null && sprite.texture.isReadable)
+        {
+            Rect r = sprite.textureRect;
+            top = AverageRow(sprite.texture, r, (int)r.yMax - 2);
+            bottom = AverageRow(sprite.texture, r, (int)r.yMin + 1);
+        }
+        top.a = bottom.a = 1f;
+        backdropTexture.SetPixel(0, 0, bottom);
+        backdropTexture.SetPixel(0, 1, top);
+        backdropTexture.Apply();
+    }
+
+    static Color AverageRow(Texture2D tex, Rect r, int y)
+    {
+        Color sum = Color.clear;
+        int n = 0;
+        for (int x = (int)r.xMin; x < (int)r.xMax; x += 8)
+        {
+            sum += tex.GetPixel(x, y);
+            n++;
+        }
+        return n > 0 ? sum / n : Color.gray;
     }
 
     // ---------- 배율과 챕터 ----------
