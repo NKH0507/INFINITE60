@@ -90,7 +90,7 @@ public class Brick : MonoBehaviour
         // 장애물을 포함해 파괴된 벽돌 하나당 코인 1개를 지급한다.
         if (CoinManager.instance != null)
         {
-            CoinManager.instance.AddCoin(coinReward);
+            CoinManager.instance.AddRewardCoin(coinReward);
         }
 
         // 현재 스테이지의 벽돌만 일반/보스 진행에 반영한다.

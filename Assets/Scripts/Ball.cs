@@ -70,8 +70,21 @@ public class Ball : MonoBehaviour
 
         currentSpeed = launchSpeed;
         baseScale = transform.localScale;
-        // Inspector의 Power를 시작 공격력으로 사용한다. 0 이하이면 기본 공격력을 사용한다.
-        power = gameManager.ClampAttackPower(power > 0f ? power : gameManager.firstStagePower);
+        // Inspector의 Power가 0보다 크면 그 값을 기본 공격력으로 사용
+        // 0 이하면 GameManager의 First Stage Power를 사용
+        float basePower = power > 0f ? power : gameManager.firstStagePower;
+
+        // 저장된 공격력 업그레이드 레벨을 가져옴
+        int attackLevel = StatUpgradeButton.GetLevel(
+            StatUpgradeButton.StatType.Attack);
+
+        // 해당 레벨의 공격력 배율을 가져옴
+        float attackMultiplier = PlayerStats.GetAttackMultiplier(attackLevel);
+
+        // 기본 공격력에 배율을 곱하고 기존 공격력 상한을 적용함
+        power = gameManager.ClampAttackPower(basePower * attackMultiplier);
+
+        // 계산된 공격력에 맞춰 공 크기를 설정함
         RefreshSize(true);
     }
 

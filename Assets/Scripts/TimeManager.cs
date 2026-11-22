@@ -61,6 +61,19 @@ public class TimeManager : MonoBehaviour
     // 시간을 초기화
     public void ResetTime()
     {
+        // 저장된 시작 시간 레벨 가져오기
+        int startingTimeLevel = StatUpgradeButton.GetLevel(     
+        StatUpgradeButton.StatType.StartingTime);
+
+        // 저장된 시작 시간 레벨 가져오기
+        int missPenaltyLevel = StatUpgradeButton.GetLevel(      
+            StatUpgradeButton.StatType.MissPenalty);
+
+        //시작 시간 레벨 계산
+        stageTime = PlayerStats.GetStartingTimeSeconds(startingTimeLevel);
+        ////공 놓침 패널티 시간 계산
+        fallTimePenalty = PlayerStats.GetMissPenaltySeconds(missPenaltyLevel);
+
         remainTime = stageTime;
 
         // 초기화할 때는 시간 정지

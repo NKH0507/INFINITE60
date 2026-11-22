@@ -18,7 +18,7 @@ public static class PlayerStats  // 플레이어 스탯 증가 (공격력, 놓�
     public static int GetStartingTimeSeconds(int level) // 라운드 시간 증가
     {
         int startingTimeLevel = Mathf.Clamp(level, 0, 15); // 레벨을 15까지 제한 (최대 라운드 시간 2분)
-        return 60 + 4 * ClampLevel(level);              // 레벨마다 시간 4초 증가
+        return 60 + 4 * startingTimeLevel;              // 레벨마다 시간 4초 증가
     }
 
     
