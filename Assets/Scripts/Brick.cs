@@ -107,7 +107,10 @@ public class Brick : MonoBehaviour
         if (currentBall != null && gameManager != null)
         {
             // 최대 체력 기준으로 공격력을 흡수한 뒤 스테이지 전환 조건을 확인한다.
-            currentBall.AddPower(maxHp * gameManager.absorbRate);
+            float absorbAmount = maxHp * gameManager.absorbRate;
+            currentBall.AddPower(absorbAmount);
+            // 삼각형 조각이 흩어졌다가 공으로 빨려 들어가는 연출. 공은 조각이 닿을 때 커진다.
+            AbsorbFx.Spawn(this, GetComponent<SpriteRenderer>(), currentBall, absorbAmount);
             gameManager.CheckZoom();
         }
 
