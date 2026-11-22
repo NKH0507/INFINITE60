@@ -14,7 +14,17 @@ public class StatUpgradeButton : MonoBehaviour
     }
 
     [SerializeField] private StatType stat;
-    [SerializeField] private int upgradeCost = 50;
+    [SerializeField] private int upgradeCost = 50;      // 0레벨에서 1레벨로 올리는 가격
+    [SerializeField] private float costGrowth = 1.25f;  // 레벨이 오를 때마다 가격 배율
+
+    public const int MaxLevel = 10;
+
+    // 현재 레벨에서 다음 레벨로 올리는 가격. 50 → 62 → 78 → 98 → ... → 373 (최대 레벨이면 -1)
+    public static int GetPrice(int currentLevel, int baseCost = 50, float growth = 1.25f)
+    {
+        if (currentLevel >= MaxLevel) return -1;
+        return Mathf.RoundToInt(baseCost * Mathf.Pow(growth, currentLevel));
+    }
     [SerializeField] private Text statText;
 
     void OnEnable()
@@ -89,13 +99,17 @@ public class StatUpgradeButton : MonoBehaviour
                     $"패들 크기 Lv.{level}\n{scaleX:0.#}";
                 break;
         }
+
+        // 가격 표시 (최대 레벨이면 MAX)
+        int price = GetPrice(level, upgradeCost, costGrowth);
+        statText.text += price < 0 ? "\nMAX" : $"\n{price} 코인";
     }
 
     public void Upgrade()
     {
         int level = GetLevel(stat);
 
-        if (level >= 10)
+        if (level >= MaxLevel)
         {
             Debug.Log("이미 최대 레벨입니다.");
             return;
@@ -107,7 +121,8 @@ public class StatUpgradeButton : MonoBehaviour
             return;
         }
 
-        if (!CoinManager.instance.UseCoin(upgradeCost))
+        int price = GetPrice(level, upgradeCost, costGrowth);
+        if (!CoinManager.instance.UseCoin(price))
         {
             Debug.Log("코인이 부족합니다.");
             return;
